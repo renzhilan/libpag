@@ -62,18 +62,16 @@ std::string DumpMD5(const PixelMap& pixelMap) {
   return DumpMD5(pixelMap.pixels(), pixelMap.byteSize());
 }
 
-Bitmap MakeSnapshot(std::shared_ptr<PAGSurface> pagSurface) {
-  Bitmap bitmap = {};
-  if (!bitmap.allocPixels(pagSurface->width(), pagSurface->height())) {
-    return bitmap;
+std::shared_ptr<PixelBuffer> MakeSnapshot(std::shared_ptr<PAGSurface> pagSurface) {
+  auto pixelBuffer = PixelBuffer::Make(pagSurface->width(), pagSurface->height(), false, false);
+  if (pixelBuffer == nullptr) {
+    return nullptr;
   }
-  BitmapLock lock(bitmap);
-  auto result = pagSurface->readPixels(bitmap.colorType(), bitmap.alphaType(), lock.pixels(),
-                                       bitmap.rowBytes());
-  if (!result) {
-    bitmap.reset();
-  }
-  return bitmap;
+  auto pixels = pixelBuffer->lockPixels();
+  auto info = pixelBuffer->info();
+  auto result = pagSurface->readPixels(info.colorType(), info.alphaType(), pixels, info.rowBytes());
+  pixelBuffer->unlockPixels();
+  return result ? pixelBuffer : nullptr;
 }
 
 std::string DumpMD5(std::shared_ptr<PAGSurface> pagSurface) {
@@ -110,7 +108,7 @@ void TraceIf(std::shared_ptr<PixelBuffer> pixelBuffer, const std::string& path, 
 }
 
 void TraceIf(const PixelMap& pixelMap, const std::string& path, bool condition) {
-//      condition = true;  // 忽略条件输出所有图片。
+  //      condition = true;  // 忽略条件输出所有图片。
   if (condition) {
     TraceImage(pixelMap, path);
   }

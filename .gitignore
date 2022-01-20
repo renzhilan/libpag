@@ -46,6 +46,7 @@ cmake-build-release
 node_modules
 Build/
 test/out/
+test/cache/
 DerivedData/
 xcuserdata
 *.xcworkspace

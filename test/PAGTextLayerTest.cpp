@@ -215,7 +215,7 @@ PAG_TEST_F(PAGTextLayerTest, Emoji_ID79762747) {
 /**
  * 用例描述: PAGTextLayer Emoji 功能测试
  */
-PAG_TEST_F(PAGTextLayerTest, NormalEmoji_ID79762751) {
+PAG_TEST_F(PAGTextLayerTest, NormalEmoji) {
   auto pagFile = PAGFile::Load("../assets/test2.pag");
   auto textData = pagFile->getTextData(0);
   textData->text = "ha ha哈哈\n哈😆哈哈哈";
@@ -223,14 +223,8 @@ PAG_TEST_F(PAGTextLayerTest, NormalEmoji_ID79762751) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  auto md5 = getMd5FromSnap();
-  PAGTestEnvironment::DumpJson["PAGTextLayerTester"]["normalEmoji"] = md5;
-#ifdef COMPARE_JSON_PATH
-  auto emojiMd5 = PAGTestEnvironment::CompareJson["PAGTextLayerTester"]["normalEmoji"];
-  TraceIf(TestPAGSurface, "../test/out/pag_textlayer_normalEmoji.png",
-          emojiMd5.get<std::string>() != md5);
-  EXPECT_EQ(emojiMd5.get<std::string>(), md5);
-#endif
+  auto snapshot = MakeSnapshot(TestPAGSurface);
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGTextLayerTest_NormalEmoji.png"));
 }
 
 /**

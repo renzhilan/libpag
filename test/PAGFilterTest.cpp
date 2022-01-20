@@ -72,12 +72,6 @@ PAG_TEST(PAGFilterTest, CornerPin_ID79157693) {
  * 用例描述: Bulge效果测试
  */
 PAG_TEST(PAGFilterTest, Bulge_ID79159683) {
-  json compareJson;
-  std::ifstream inputFile("../test/res/compare_filter_md5.json");
-  if (inputFile) {
-    inputFile >> compareJson;
-    inputFile.close();
-  }
   auto pagFile = PAGFile::Load("../resources/filter/bulge.pag");
   ASSERT_NE(pagFile, nullptr);
   auto pagSurface = PAGSurface::MakeOffscreen(pagFile->width(), pagFile->height());
@@ -89,25 +83,7 @@ PAG_TEST(PAGFilterTest, Bulge_ID79159683) {
   pagFile->setCurrentTime(300000);
   pagPlayer->flush();
   auto snapshot = MakeSnapshot(pagSurface);
-  std::string md5 = DumpMD5(snapshot);
-#ifdef COMPARE_JSON_PATH
-  auto cJson = compareJson["PAGFilterTest"]["bulge"];
-  if (cJson != nullptr) {
-    TraceIf(snapshot, "../test/out/pag_bulge_test_300000.png", cJson.get<std::string>() != md5);
-    EXPECT_EQ(cJson.get<std::string>(), md5);
-  }
-#endif
-
-  json dumpJson;
-  std::ifstream dumpInputFile("../test/out/compare_filter_md5.json");
-  if (dumpInputFile) {
-    dumpInputFile >> dumpJson;
-    dumpInputFile.close();
-  }
-  dumpJson["PAGFilterTest"]["bulge"] = md5;
-  std::ofstream outFile("../test/out/compare_filter_md5.json");
-  outFile << std::setw(4) << dumpJson << std::endl;
-  outFile.close();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest_Bulge.png"));
 }
 
 /**
@@ -317,13 +293,8 @@ PAG_TEST(PAGFilterTest, Glow_ID79163671) {
 /**
  * 用例描述: DropShadow效果测试
  */
+
 PAG_TEST(PAGFilterTest, DropShadow_ID79164133) {
-  json compareJson;
-  std::ifstream inputFile("../test/res/compare_filter_md5.json");
-  if (inputFile) {
-    inputFile >> compareJson;
-    inputFile.close();
-  }
   auto pagFile = PAGFile::Load("../resources/filter/DropShadow.pag");
   ASSERT_NE(pagFile, nullptr);
   auto pagSurface = PAGSurface::MakeOffscreen(pagFile->width(), pagFile->height());
@@ -335,25 +306,7 @@ PAG_TEST(PAGFilterTest, DropShadow_ID79164133) {
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
   auto snapshot = MakeSnapshot(pagSurface);
-  std::string md5 = DumpMD5(snapshot);
-#ifdef COMPARE_JSON_PATH
-  auto cJson = compareJson["PAGFilterTest"]["dropshadow"];
-  if (cJson != nullptr) {
-    TraceIf(snapshot, "../test/out/pag_dropshadow_test_200000.png",
-            cJson.get<std::string>() != md5);
-    EXPECT_EQ(cJson.get<std::string>(), md5);
-  }
-#endif
-  json dumpJson;
-  std::ifstream dumpInputFile("../test/out/compare_filter_md5.json");
-  if (dumpInputFile) {
-    dumpInputFile >> dumpJson;
-    dumpInputFile.close();
-  }
-  dumpJson["PAGFilterTest"]["dropshadow"] = md5;
-  std::ofstream outFile("../test/out/compare_filter_md5.json");
-  outFile << std::setw(4) << dumpJson << std::endl;
-  outFile.close();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest_DropShadow.png"));
 }
 
 /**
@@ -568,12 +521,6 @@ PAG_TEST(PAGFilterTest, Mosaic) {
  * 用例描述: 多滤镜混合效果测试
  */
 PAG_TEST(PAGFilterTest, MultiFilter_ID79164477) {
-  json compareJson;
-  std::ifstream inputFile("../test/res/compare_filter_md5.json");
-  if (inputFile) {
-    inputFile >> compareJson;
-    inputFile.close();
-  }
   auto pagFile = PAGFile::Load("../resources/filter/cornerpin-bulge.pag");
   ASSERT_NE(pagFile, nullptr);
   auto pagSurface = PAGSurface::MakeOffscreen(pagFile->width(), pagFile->height());
@@ -585,22 +532,7 @@ PAG_TEST(PAGFilterTest, MultiFilter_ID79164477) {
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
   auto snapshot = MakeSnapshot(pagSurface);
-  std::string md5 = DumpMD5(snapshot);
-#ifdef COMPARE_JSON_PATH
-  auto cJson = compareJson["PAGFilterTest"]["cornerpin-bulge"];
-  if (cJson != nullptr) {
-    TraceIf(snapshot, "../test/out/pag_cornerpin_bulge_test_1000000.png",
-            cJson.get<std::string>() != md5);
-    EXPECT_EQ(cJson.get<std::string>(), md5);
-  }
-#endif
-  json dumpJson;
-  std::ifstream dumpInputFile("../test/out/compare_filter_md5.json");
-  if (dumpInputFile) {
-    dumpInputFile >> dumpJson;
-    dumpInputFile.close();
-  }
-  dumpJson["PAGFilterTest"]["cornerpin-bulge"] = md5;
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest_CornerPin_Bulge.png"));
 
   pagFile = PAGFile::Load("../resources/filter/motiontile_blur.pag");
   ASSERT_NE(pagFile, nullptr);
@@ -613,18 +545,6 @@ PAG_TEST(PAGFilterTest, MultiFilter_ID79164477) {
   pagFile->setCurrentTime(400000);
   pagPlayer->flush();
   snapshot = MakeSnapshot(pagSurface);
-  md5 = DumpMD5(snapshot);
-#ifdef COMPARE_JSON_PATH
-  cJson = compareJson["PAGFilterTest"]["motiontile_blur"];
-  if (cJson != nullptr) {
-    TraceIf(snapshot, "../test/out/pag_motiontile_blur_test_400000.png",
-            cJson.get<std::string>() == md5);
-    EXPECT_EQ(cJson.get<std::string>(), md5);
-  }
-#endif
-  dumpJson["PAGFilterTest"]["motiontile_blur"] = md5;
-  std::ofstream outFile("../test/out/compare_filter_md5.json");
-  outFile << std::setw(4) << dumpJson << std::endl;
-  outFile.close();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest_Motiontile_Blur.png"));
 }
 }  // namespace pag
