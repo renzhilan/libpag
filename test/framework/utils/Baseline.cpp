@@ -38,7 +38,7 @@ static void CheckCache(const std::string& key, const std::string& modifiedTime) 
   if (std::filesystem::exists(filePath)) {
     auto writeTime = std::filesystem::last_write_time(filePath);
     auto timestamp =
-        std::chrono::duration_cast<std::chrono::milliseconds>(writeTime.time_since_epoch()).count();
+        std::chrono::duration_cast<std::chrono::microseconds>(writeTime.time_since_epoch()).count();
     auto fileTime = std::to_string(timestamp);
     if (fileTime == modifiedTime) {
       return;
@@ -106,7 +106,7 @@ std::shared_ptr<Data> LoadBaselineData(const std::string& key) {
   out.close();
   auto writeTime = std::filesystem::last_write_time(filePath);
   auto timestamp =
-      std::chrono::duration_cast<std::chrono::milliseconds>(writeTime.time_since_epoch()).count();
+      std::chrono::duration_cast<std::chrono::microseconds>(writeTime.time_since_epoch()).count();
   BaselineJSON[key] = std::to_string(timestamp);
   return data;
 }
