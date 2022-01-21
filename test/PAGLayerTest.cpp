@@ -147,7 +147,7 @@ PAG_TEST_F(PAGLayerTest, trackMatte) {
   ASSERT_EQ(TestPAGFile->currentTime(), 800 * 1000);
   TestPAGPlayer->flush();
   auto snapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_trackMatte.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/trackMatte.png"));
 }
 
 /**
@@ -162,7 +162,7 @@ PAG_TEST_F(PAGLayerTest, visible) {
   textLayer1->setVisible(false);
   TestPAGPlayer->flush();
   auto snapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_visible.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/visible.png"));
 }
 
 /**
@@ -185,7 +185,7 @@ PAG_TEST_F(PAGLayerTest, matrix) {
   textLayer2->setMatrix(mtx);
   TestPAGPlayer->flush();
   auto snapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_matrix.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/matrix.png"));
 }
 
 /**
@@ -196,7 +196,7 @@ PAG_TEST_F(PAGLayerTest, nextFrame) {
   TestPAGFile->nextFrame();
   TestPAGPlayer->flush();
   auto snapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_nextFrame.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/nextFrame.png"));
 }
 
 /**
@@ -208,7 +208,7 @@ PAG_TEST_F(PAGLayerTest, preFrame) {
   TestPAGFile->preFrame();
   TestPAGPlayer->flush();
   auto snapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_preFrame.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/preFrame.png"));
 }
 
 PAG_TEST_CASE_WITH_PATH(PAGLayerFrameTest, "../assets/repeater.pag")
@@ -283,7 +283,7 @@ PAG_TEST_F(PAGLayerTest, AlphaMask) {
   TestPAGPlayer->setProgress(0.78);
   TestPAGPlayer->flush();
   auto image = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(image, "PAGLayerTest_AlphaMask.png"));
+  EXPECT_TRUE(Baseline::Compare(image, "PAGLayerTest/AlphaMask.png"));
 }
 
 /**
@@ -311,7 +311,7 @@ PAG_TEST_F(PAGLayerTest, TextScale) {
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
   auto skImage = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest_TextScale.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest/TextScale.png"));
 }
 
 /**
@@ -330,6 +330,6 @@ PAG_TEST_F(PAGLayerTest, Opacity) {
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
   auto skImage = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest_Opacity.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest/Opacity.png"));
 }
 }  // namespace pag

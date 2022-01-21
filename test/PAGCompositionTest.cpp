@@ -109,7 +109,7 @@ PAG_TEST_F(VideoSequenceSize, VideoSequence) {
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
   auto image = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(image, "VideoSequenceSize_VideoSequence.png"));
+  EXPECT_TRUE(Baseline::Compare(image, "VideoSequenceSize/VideoSequence.png"));
 }
 
 // ContainerTest 中会操作容器，所以此处需要声明为case，不能声明为suit

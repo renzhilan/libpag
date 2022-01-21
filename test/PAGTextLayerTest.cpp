@@ -224,7 +224,7 @@ PAG_TEST_F(PAGTextLayerTest, NormalEmoji) {
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
   auto snapshot = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGTextLayerTest_NormalEmoji.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGTextLayerTest/NormalEmoji.png"));
 }
 
 /**

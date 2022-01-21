@@ -29,7 +29,7 @@ PAG_TEST_SUIT(PAGSurfaceTest)
 /**
  * 用例描述: 测试 PAGSurface 数据同步
  */
-PAG_TEST(PAGSurfaceTest, FromTexture_ID82382683) {
+PAG_TEST(PAGSurfaceTest, FromTexture) {
   auto pagFile = PAGFile::Load("../resources/apitest/test.pag");
   int width = pagFile->width();
   int height = pagFile->height();
@@ -74,13 +74,9 @@ PAG_TEST(PAGSurfaceTest, FromTexture_ID82382683) {
     EXPECT_TRUE(semaphore.isInitialized());
     EXPECT_NE(semaphore.glSync(), nullptr);
     EXPECT_TRUE(pagPlayer2->wait(semaphore));
-    auto md5 = DumpMD5(pagSurface2);
-    PAGTestEnvironment::DumpJson["PAGSurfaceTest"]["FromTexture_ID82382683"] = md5;
-#ifdef COMPARE_JSON_PATH
-    auto compareMD5 = PAGTestEnvironment::CompareJson["PAGSurfaceTest"]["FromTexture_ID82382683"];
-    TraceIf(pagSurface2, "../test/out/FromTexture_ID82382683.png", md5 != compareMD5);
-    EXPECT_EQ(compareMD5.get<std::string>(), md5);
-#endif
+
+    auto snapshot = MakeSnapshot(pagSurface);
+    EXPECT_TRUE(Baseline::Compare(snapshot, "PAGSurfaceTest/FromTexture.png"));
   }
 }
 
@@ -108,7 +104,7 @@ PAG_TEST(PAGSurfaceTest, Mask) {
   pagPlayer->setProgress(0.9);
   pagPlayer->flush();
   auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGSurfaceTest_Mask.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGSurfaceTest/Mask.png"));
 
   context = device->lockContext();
   ASSERT_TRUE(context != nullptr);

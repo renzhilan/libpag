@@ -522,8 +522,8 @@ PAG_TEST_F(PAGFileTimeStretchRepeat, timeStretch) {
   auto skImage_61 = MakeSnapshot(TestPAGSurface);
   std::string compMd5 = DumpMD5(skImage_61);
   ASSERT_EQ(md5, compMd5);
-  EXPECT_TRUE(Baseline::Compare(skImage_1, "PAGFileTimeStretchRepeat_timeStretch_Repeat_1.png"));
-  EXPECT_TRUE(Baseline::Compare(skImage_61, "PAGFileTimeStretchRepeat_timeStretch_Repeat_61.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_1, "PAGFileTimeStretchRepeat/timeStretch_Repeat_1.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_61, "PAGFileTimeStretchRepeat/timeStretch_Repeat_61.png"));
 }
 
 PAG_TEST_CASE_WITH_PATH(PAGFileTimeStretchRepeatInverted,
@@ -538,13 +538,13 @@ PAG_TEST_F(PAGFileTimeStretchRepeatInverted, timeStretch) {
   TestPAGFile->setCurrentTime(1000000ll / 30 + 1);
   TestPAGPlayer->flush();
   auto skImage_1 = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage_1, "PAGFileTimeStretchRepeatInverted_timeStretch_RepeateInverted_1.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_1, "PAGFileTimeStretchRepeatInverted/timeStretch_RepeateInverted_1.png"));
 
   //第198帧
   TestPAGFile->setCurrentTime(2000000ll - 2 * 1000000ll / 30 + 2000000ll);
   TestPAGPlayer->flush();
   auto skImage_198 = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage_198, "PAGFileTimeStretchRepeatInverted_timeStretch_RepeateInverted_198.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_198, "PAGFileTimeStretchRepeatInverted/timeStretch_RepeateInverted_198.png"));
 }
 
 PAG_TEST_CASE_WITH_PATH(PAGFileTimeStretchScale, "../resources/apitest/test_scale.pag")
@@ -570,8 +570,8 @@ PAG_TEST_F(PAGFileTimeStretchScale, timeStretch) {
   TestPAGFile->setCurrentTime(4000000ll - 30 * 1000000ll / 30);
   TestPAGPlayer->flush();
   auto skImage_90 = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage_30, "PAGFileTimeStretchScale_timeStretch_Scale_30.png"));
-  EXPECT_TRUE(Baseline::Compare(skImage_90, "PAGFileTimeStretchScale_timeStretch_Scale_90.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_30, "PAGFileTimeStretchScale/timeStretch_Scale_30.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_90, "PAGFileTimeStretchScale/timeStretch_Scale_90.png"));
   //第17帧
   //计算会有一定误差：现在的结果是10->10 13->11 17->12
   TestPAGFile->setCurrentTime(17 * 1000000ll / 30 + 1);
@@ -579,8 +579,8 @@ PAG_TEST_F(PAGFileTimeStretchScale, timeStretch) {
   auto skImage_17 = MakeSnapshot(TestPAGSurface);
   std::string compSecMd5 = DumpMD5(skImage_17);
   ASSERT_EQ(secMd5, compSecMd5);
-  EXPECT_TRUE(Baseline::Compare(skImage_12, "PAGFileTimeStretchScale_timeStretch_Scale_12.png"));
-  EXPECT_TRUE(Baseline::Compare(skImage_17, "PAGFileTimeStretchScale_timeStretch_Scale_17.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_12, "PAGFileTimeStretchScale/timeStretch_Scale_12.png"));
+  EXPECT_TRUE(Baseline::Compare(skImage_17, "PAGFileTimeStretchScale/timeStretch_Scale_17.png"));
 }
 
 /**
