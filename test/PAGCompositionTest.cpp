@@ -51,32 +51,32 @@ PAG_TEST_F(PAGCompositionTest, composition) {
   pagComposition->swapLayer(imageLayer1, imageLayer2);
   TestPAGPlayer->flush();
   auto swapLayerSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(swapLayerSnapshot, "PAGCompositionTest_composition_swapLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(swapLayerSnapshot, "PAGCompositionTest/composition_swapLayer.png"));
 
   pagComposition->swapLayerAt(2, 3);
   TestPAGPlayer->flush();
   auto swapLayerAtSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(swapLayerSnapshot, "PAGCompositionTest_composition_swapLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(swapLayerSnapshot, "PAGCompositionTest/composition_swapLayerAt.png"));
 
   pagComposition->setLayerIndex(imageLayer1, 3);
   TestPAGPlayer->flush();
   auto setLayerIndexSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(swapLayerAtSnapshot, "PAGCompositionTest_composition_setLayerIndex.png"));
+  EXPECT_TRUE(Baseline::Compare(swapLayerAtSnapshot, "PAGCompositionTest/composition_setLayerIndex.png"));
 
   pagComposition->removeLayer(imageLayer1);
   TestPAGPlayer->flush();
   auto removeLayerSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(removeLayerSnapshot, "PAGCompositionTest_composition_removeLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(removeLayerSnapshot, "PAGCompositionTest/composition_removeLayer.png"));
 
   pagComposition->removeLayerAt(2);
   TestPAGPlayer->flush();
   auto removeLayerAtSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(removeLayerAtSnapshot, "PAGCompositionTest_composition_removeLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(removeLayerAtSnapshot, "PAGCompositionTest/composition_removeLayerAt.png"));
 
   pagComposition->removeAllLayers();
   TestPAGPlayer->flush();
   auto removeAllLayersSnapshot =  getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(removeAllLayersSnapshot, "PAGCompositionTest_composition_removeAllLayers.png"));
+  EXPECT_TRUE(Baseline::Compare(removeAllLayersSnapshot, "PAGCompositionTest/composition_empty.png"));
 
   auto pagFile2 = PAGFile::Load(DEFAULT_PAG_PATH);
   auto pagComposition2 = std::static_pointer_cast<PAGComposition>(pagFile2->getLayerAt(0));
@@ -84,19 +84,19 @@ PAG_TEST_F(PAGCompositionTest, composition) {
   pagComposition->addLayer(imageLayer);
   TestPAGPlayer->flush();
   auto addLayerSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(addLayerSnapshot, "PAGCompositionTest_composition_addLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(addLayerSnapshot, "PAGCompositionTest/composition_empty.png"));
 
   pagComposition->addLayerAt(pagComposition2->getLayerAt(3), 0);
   TestPAGPlayer->flush();
   auto addLayerAtSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(addLayerAtSnapshot, "PAGCompositionTest_composition_addLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(addLayerAtSnapshot, "PAGCompositionTest/composition_empty.png"));
 
   pagComposition->setContentSize(300, 300);
   ASSERT_EQ(pagComposition->width(), 300);
   ASSERT_EQ(pagComposition->height(), 300);
   TestPAGPlayer->flush();
   auto changeContentSizeSnapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(changeContentSizeSnapshot, "PAGCompositionTest_composition_changeContentSize.png"));
+  EXPECT_TRUE(Baseline::Compare(changeContentSizeSnapshot, "PAGCompositionTest/composition_empty.png"));
 }
 
 PAG_TEST_SUIT_WITH_PATH(VideoSequenceSize, "../resources/apitest/video_sequence_size.pag")

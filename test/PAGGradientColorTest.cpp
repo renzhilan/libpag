@@ -38,7 +38,7 @@ PAG_TEST_F(PAGGradientColorTest, GradientColor_ID84028439) {
     auto snapshot = MakeSnapshot(TestPAGSurface);
     std::filesystem::path path(file);
     auto key = path.filename().replace_extension("png");
-    EXPECT_TRUE(Baseline::Compare(snapshot, "PAGGradientColorTest_" + key.string()));
+    EXPECT_TRUE(Baseline::Compare(snapshot, "PAGGradientColorTest/" + key.string()));
   }
 }
 }  // namespace pag

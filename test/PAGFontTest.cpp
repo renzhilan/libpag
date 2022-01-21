@@ -51,7 +51,7 @@ PAG_TEST(PAGFontTest, TestFont) {
     pagPlayer->flush();
 
     auto skImage = MakeSnapshot(pagSurface);
-    bool same =  Baseline::Compare(skImage,  "PAGFontTest_TestFont_" + std::to_string(currentFrame) + ".png");
+    bool same =  Baseline::Compare(skImage,  "PAGFontTest/TestFont_" + std::to_string(currentFrame) + ".png");
     EXPECT_TRUE(same);
     if (!same) {
       errorMsg += (std::to_string(currentFrame) + ";");
