@@ -50,55 +50,53 @@ PAG_TEST_F(PAGCompositionTest, composition) {
 
   pagComposition->swapLayer(imageLayer1, imageLayer2);
   TestPAGPlayer->flush();
-  auto swapLayerMd5 = getMd5FromSnap();
+  auto swapLayerSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(swapLayerSnapshot, "PAGCompositionTest_composition_swapLayer.png"));
 
   pagComposition->swapLayerAt(2, 3);
   TestPAGPlayer->flush();
-  auto swapLayerAtMd5 = getMd5FromSnap();
+  auto swapLayerAtSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(swapLayerSnapshot, "PAGCompositionTest_composition_swapLayerAt.png"));
 
   pagComposition->setLayerIndex(imageLayer1, 3);
   TestPAGPlayer->flush();
-  auto setLayerIndexMd5 = getMd5FromSnap();
+  auto setLayerIndexSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(swapLayerAtSnapshot, "PAGCompositionTest_composition_setLayerIndex.png"));
 
   pagComposition->removeLayer(imageLayer1);
   TestPAGPlayer->flush();
-  auto removeLayerMd5 = getMd5FromSnap();
+  auto removeLayerSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(removeLayerSnapshot, "PAGCompositionTest_composition_removeLayer.png"));
 
   pagComposition->removeLayerAt(2);
   TestPAGPlayer->flush();
-  auto removeLayerAtMd5 = getMd5FromSnap();
+  auto removeLayerAtSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(removeLayerAtSnapshot, "PAGCompositionTest_composition_removeLayerAt.png"));
 
   pagComposition->removeAllLayers();
   TestPAGPlayer->flush();
-  auto removeAllLayersMd5 = getMd5FromSnap();
+  auto removeAllLayersSnapshot =  getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(removeAllLayersSnapshot, "PAGCompositionTest_composition_removeAllLayers.png"));
 
   auto pagFile2 = PAGFile::Load(DEFAULT_PAG_PATH);
   auto pagComposition2 = std::static_pointer_cast<PAGComposition>(pagFile2->getLayerAt(0));
   auto imageLayer = pagComposition2->getLayerAt(2);
   pagComposition->addLayer(imageLayer);
   TestPAGPlayer->flush();
-  auto addLayerMd5 = getMd5FromSnap();
+  auto addLayerSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(addLayerSnapshot, "PAGCompositionTest_composition_addLayer.png"));
 
   pagComposition->addLayerAt(pagComposition2->getLayerAt(3), 0);
   TestPAGPlayer->flush();
-  auto addLayerAtMd5 = DumpMD5(TestPAGSurface);
+  auto addLayerAtSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(addLayerAtSnapshot, "PAGCompositionTest_composition_addLayerAt.png"));
 
   pagComposition->setContentSize(300, 300);
   ASSERT_EQ(pagComposition->width(), 300);
   ASSERT_EQ(pagComposition->height(), 300);
   TestPAGPlayer->flush();
-  auto changeContentSizeMd5 = DumpMD5(TestPAGSurface);
-
-  json out = {{"composition",
-               {{"swapLayer", swapLayerMd5},
-                {"setLayerIndexMd5", setLayerIndexMd5},
-                {"removeLayerMd5", removeLayerMd5},
-                {"removeLayerAtMd5", removeLayerAtMd5},
-                {"removeAllLayersMd5", removeAllLayersMd5},
-                {"addLayerMd5", addLayerMd5},
-                {"addLayerAtMd5", addLayerAtMd5},
-                {"changeContentSizeMd5", changeContentSizeMd5}}}};
-  PAGTestEnvironment::DumpJson["PAGCompositionTest"] = out;
+  auto changeContentSizeSnapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(changeContentSizeSnapshot, "PAGCompositionTest_composition_changeContentSize.png"));
 }
 
 PAG_TEST_SUIT_WITH_PATH(VideoSequenceSize, "../resources/apitest/video_sequence_size.pag")
@@ -106,19 +104,12 @@ PAG_TEST_SUIT_WITH_PATH(VideoSequenceSize, "../resources/apitest/video_sequence_
 /**
  * 用例描述: VideoSequence的大小和Composition不一致
  */
-PAG_TEST_F(VideoSequenceSize, VideoSequence_ID82854769) {
+PAG_TEST_F(VideoSequenceSize, VideoSequence) {
   TestPAGFile->setMatrix(Matrix::MakeScale(0.8625));
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
   auto image = MakeSnapshot(TestPAGSurface);
-  auto md5 = DumpMD5(image);
-  PAGTestEnvironment::DumpJson["PAGCompositionTest"]["VideoSequence_ID82854769"] = md5;
-#ifdef COMPARE_JSON_PATH
-  auto compareMD5 =
-      PAGTestEnvironment::CompareJson["PAGCompositionTest"]["VideoSequence_ID82854769"];
-  TraceIf(image, "../test/out/VideoSequence_ID82854769.png", compareMD5.get<std::string>() != md5);
-  EXPECT_EQ(compareMD5.get<std::string>(), md5);
-#endif
+  EXPECT_TRUE(Baseline::Compare(image, "VideoSequenceSize_VideoSequence.png"));
 }
 
 // ContainerTest 中会操作容器，所以此处需要声明为case，不能声明为suit

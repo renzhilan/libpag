@@ -23,6 +23,7 @@
 #include "pag/file.h"
 #include "pag/pag.h"
 #include "pag_test.h"
+#include "image/PixelBuffer.h"
 
 namespace pag {
 class PAGCpuTest : public testing::Test {
@@ -64,6 +65,8 @@ class PAGCpuTest : public testing::Test {
   static std::shared_ptr<PAGPlayer> TestPAGPlayer;
 
   static std::string getMd5FromSnap();
+
+  static std::shared_ptr<PixelBuffer> getSnapshot();
 
  private:
   GTEST_DISALLOW_COPY_AND_ASSIGN_(PAGCpuTest);

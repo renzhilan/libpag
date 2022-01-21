@@ -146,14 +146,8 @@ PAG_TEST_F(PAGLayerTest, trackMatte) {
   TestPAGFile->setCurrentTime(800 * 1000);
   ASSERT_EQ(TestPAGFile->currentTime(), 800 * 1000);
   TestPAGPlayer->flush();
-  auto tmMd5 = getMd5FromSnap();
-  ASSERT_NE(tmMd5, "");
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["trackMatte"] = tmMd5;
-#ifdef COMPARE_JSON_PATH
-  auto cTrackMatte = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["trackMatte"];
-  TraceIf(TestPAGSurface, "../test/out/trackMatte.png", cTrackMatte.get<std::string>() != tmMd5);
-  EXPECT_EQ(cTrackMatte.get<std::string>(), tmMd5);
-#endif
+  auto snapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_trackMatte.png"));
 }
 
 /**
@@ -167,14 +161,8 @@ PAG_TEST_F(PAGLayerTest, visible) {
   ASSERT_NE(textLayer1, nullptr);
   textLayer1->setVisible(false);
   TestPAGPlayer->flush();
-  auto visibleMd5 = getMd5FromSnap();
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["visible"] = visibleMd5;
-#ifdef COMPARE_JSON_PATH
-  auto cTrackMatte = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["visible"];
-  TraceIf(TestPAGSurface, "../test/out/pag_layer_visible.png",
-          cTrackMatte.get<std::string>() != visibleMd5);
-  EXPECT_EQ(cTrackMatte.get<std::string>(), visibleMd5);
-#endif
+  auto snapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_visible.png"));
 }
 
 /**
@@ -196,13 +184,8 @@ PAG_TEST_F(PAGLayerTest, matrix) {
   mtx.preScale(2, 2);
   textLayer2->setMatrix(mtx);
   TestPAGPlayer->flush();
-  auto matrixMd5 = getMd5FromSnap();
-  ASSERT_NE(matrixMd5, "");
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["matrix"] = matrixMd5;
-#ifdef COMPARE_JSON_PATH
-  auto cTrackMatte = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["matrix"];
-  EXPECT_EQ(cTrackMatte.get<std::string>(), matrixMd5);
-#endif
+  auto snapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_matrix.png"));
 }
 
 /**
@@ -212,13 +195,8 @@ PAG_TEST_F(PAGLayerTest, nextFrame) {
   TestPAGFile->setCurrentTime(1960000ll);
   TestPAGFile->nextFrame();
   TestPAGPlayer->flush();
-  auto nextFrameMd5 = getMd5FromSnap();
-  ASSERT_NE(nextFrameMd5, "");
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["nextFrame"] = nextFrameMd5;
-#ifdef COMPARE_JSON_PATH
-  auto cTrackMatte = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["nextFrame"];
-  EXPECT_EQ(cTrackMatte.get<std::string>(), nextFrameMd5);
-#endif
+  auto snapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_nextFrame.png"));
 }
 
 /**
@@ -229,12 +207,8 @@ PAG_TEST_F(PAGLayerTest, preFrame) {
   TestPAGFile->nextFrame();
   TestPAGFile->preFrame();
   TestPAGPlayer->flush();
-  auto preFrameMd5 = getMd5FromSnap();
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["preFrame"] = preFrameMd5;
-#ifdef COMPARE_JSON_PATH
-  auto cTrackMatte = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["preFrame"];
-  EXPECT_EQ(cTrackMatte.get<std::string>(), preFrameMd5);
-#endif
+  auto snapshot = getSnapshot();
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest_preFrame.png"));
 }
 
 PAG_TEST_CASE_WITH_PATH(PAGLayerFrameTest, "../assets/repeater.pag")
@@ -303,25 +277,19 @@ PAG_TEST_F(PAGLayerTest, external_filter_ID79286937) {
 /**
  * 用例描述: alpha 遮罩
  */
-PAG_TEST_F(PAGLayerTest, AlphaMask_ID80514761) {
+PAG_TEST_F(PAGLayerTest, AlphaMask) {
   auto pagFile = PAGFile::Load("../resources/apitest/AlphaTrackMatte.pag");
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0.78);
   TestPAGPlayer->flush();
   auto image = MakeSnapshot(TestPAGSurface);
-  auto preFrameMd5 = DumpMD5(image);
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["alphaMask"] = preFrameMd5;
-#ifdef COMPARE_JSON_PATH
-  auto cTrackMatte = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["alphaMask"];
-  TraceIf(image, "../test/out/alphaMask.png", cTrackMatte.get<std::string>() != preFrameMd5);
-  EXPECT_EQ(cTrackMatte.get<std::string>(), preFrameMd5);
-#endif
+  EXPECT_TRUE(Baseline::Compare(image, "PAGLayerTest_AlphaMask.png"));
 }
 
 /**
  * 用例描述: 文字缩放
  */
-PAG_TEST_F(PAGLayerTest, TextScale_81527319) {
+PAG_TEST_F(PAGLayerTest, TextScale) {
   auto pagFile = PAGFile::Load("../resources/apitest/TEXT04.pag");
   auto textData = pagFile->getTextData(0);
   textData->text = "耶";
@@ -343,13 +311,7 @@ PAG_TEST_F(PAGLayerTest, TextScale_81527319) {
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
   auto skImage = MakeSnapshot(pagSurface);
-  auto dumpMd5 = DumpMD5(skImage);
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["textScale"] = dumpMd5;
-#ifdef COMPARE_JSON_PATH
-  auto textScaleMD5 = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["textScale"];
-  TraceIf(skImage, "../test/out/textScale.png", textScaleMD5.get<std::string>() != dumpMd5);
-  EXPECT_EQ(textScaleMD5.get<std::string>(), dumpMd5);
-#endif
+  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest_TextScale.png"));
 }
 
 /**
@@ -368,12 +330,6 @@ PAG_TEST_F(PAGLayerTest, Opacity) {
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
   auto skImage = MakeSnapshot(pagSurface);
-  auto dumpMd5 = DumpMD5(skImage);
-  PAGTestEnvironment::DumpJson["PAGLayerTest"]["layer"]["opacity"] = dumpMd5;
-#ifdef COMPARE_JSON_PATH
-  auto opacityMD5 = PAGTestEnvironment::CompareJson["PAGLayerTest"]["layer"]["opacity"];
-  TraceIf(skImage, "../test/out/opacity.png", opacityMD5.get<std::string>() != dumpMd5);
-  EXPECT_EQ(opacityMD5.get<std::string>(), dumpMd5);
-#endif
+  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest_Opacity.png"));
 }
 }  // namespace pag

@@ -21,6 +21,7 @@
 #include "gtest/gtest.h"
 #include "utils/PAGTestUtils.h"
 
+
 namespace pag {
 
 std::shared_ptr<PAGFile> PAGCpuTest::TestPAGFile = nullptr;
@@ -69,6 +70,13 @@ std::string PAGCpuTest::getMd5FromSnap() {
     return "";
   }
   return DumpMD5(TestPAGSurface);
+}
+
+std::shared_ptr<PixelBuffer> PAGCpuTest::getSnapshot() {
+  if (TestPAGSurface == nullptr) {
+    return nullptr;
+  }
+  return MakeSnapshot(TestPAGSurface);
 }
 
 }  // namespace pag
