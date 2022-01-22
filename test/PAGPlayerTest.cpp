@@ -92,10 +92,10 @@ PAG_TEST_F(PAGPlayerTest, switchPAGSurface) {
   auto status = pagPlayer2->flush();
   ASSERT_EQ(status, true);
 
-  auto skImage = MakeSnapshot(pagSurface1);
+  auto snapshot = MakeSnapshot(pagSurface1);
   delete pagPlayer1;
   delete pagPlayer2;
-  EXPECT_TRUE(Baseline::Compare(skImage, "PAGPlayerTest/switchPAGSurface.png"));
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGPlayerTest/switchPAGSurface.png"));
 }
 
 /**

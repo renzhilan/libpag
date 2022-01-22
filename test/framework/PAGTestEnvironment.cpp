@@ -20,7 +20,6 @@
 #include <fstream>
 #include "ffavc.h"
 #include "pag_test.h"
-#include "test/framework/utils/Baseline.h"
 
 namespace pag {
 nlohmann::json PAGTestEnvironment::CompareJson;
@@ -41,7 +40,6 @@ void PAGTestEnvironment::SetUp() {
   std::vector<int> ttcIndices = {0, 0};
   pag::PAGFont::SetFallbackFontPaths(fontPaths, ttcIndices);
   RegisterSoftwareDecoder();
-  Baseline::SetUp();
 
 #ifdef COMPARE_JSON_PATH
   std::ifstream inputFile(COMPARE_JSON_PATH);
@@ -55,7 +53,6 @@ void PAGTestEnvironment::SetUp() {
 }
 
 void PAGTestEnvironment::TearDown() {
-  Baseline::TearDown();
   if (DumpJson != nullptr) {
     std::ofstream outFile(DUMP_JSON_PATH);
     outFile << std::setw(4) << DumpJson << std::endl;

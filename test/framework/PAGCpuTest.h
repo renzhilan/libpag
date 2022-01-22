@@ -19,11 +19,11 @@
 #pragma once
 
 #include "gtest/gtest.h"
+#include "image/PixelBuffer.h"
 #include "nlohmann/json.hpp"
 #include "pag/file.h"
 #include "pag/pag.h"
 #include "pag_test.h"
-#include "image/PixelBuffer.h"
 
 namespace pag {
 class PAGCpuTest : public testing::Test {

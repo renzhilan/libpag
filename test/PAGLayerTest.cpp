@@ -282,8 +282,8 @@ PAG_TEST_F(PAGLayerTest, AlphaMask) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0.78);
   TestPAGPlayer->flush();
-  auto image = MakeSnapshot(TestPAGSurface);
-  EXPECT_TRUE(Baseline::Compare(image, "PAGLayerTest/AlphaMask.png"));
+  auto snapshot = MakeSnapshot(TestPAGSurface);
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/AlphaMask.png"));
 }
 
 /**
@@ -310,8 +310,8 @@ PAG_TEST_F(PAGLayerTest, TextScale) {
   pagPlayer->setMatrix(matrix);
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
-  auto skImage = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest/TextScale.png"));
+  auto snapshot = MakeSnapshot(pagSurface);
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/TextScale.png"));
 }
 
 /**
@@ -329,7 +329,7 @@ PAG_TEST_F(PAGLayerTest, Opacity) {
   pagPlayer->setComposition(pagFile);
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
-  auto skImage = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(skImage, "PAGLayerTest/Opacity.png"));
+  auto snapshot = MakeSnapshot(pagSurface);
+  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGLayerTest/Opacity.png"));
 }
 }  // namespace pag

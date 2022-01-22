@@ -21,103 +21,63 @@
 #include <fstream>
 #include "core/Data.h"
 #include "image/Image.h"
-#include "nlohmann/json.hpp"
+#include "image/PixelMap.h"
 
 namespace pag {
-#define BASELINE_JSON_PATH "../test/cache/baseline.json"
 #define BASELINE_ROOT "../test/baseline/"
 #define OUT_ROOT "../test/out/"
-#define CACHE_ROOT "../test/cache/baseline/"
 
-static nlohmann::json BaselineJSON = {};
-
-static void CheckCache(const std::string& key, const std::string& modifiedTime) {
-  std::filesystem::path filePath(BASELINE_ROOT + key);
-  std::filesystem::path cachePath(CACHE_ROOT + key);
-  cachePath = cachePath.replace_extension("rgba");
-  if (std::filesystem::exists(filePath)) {
-    auto writeTime = std::filesystem::last_write_time(filePath);
-    auto timestamp =
-        std::chrono::duration_cast<std::chrono::microseconds>(writeTime.time_since_epoch()).count();
-    auto fileTime = std::to_string(timestamp);
-    if (fileTime == modifiedTime) {
-      return;
-    }
-  }
-  std::filesystem::remove(cachePath);
-  BaselineJSON.erase(key);
+ImageInfo MakeInfo(int with, int height) {
+  return ImageInfo::Make(with, height, ColorType::RGBA_8888, AlphaType::Unpremultiplied);
 }
 
-static void CleanInvalidCaches() {
-  auto json = BaselineJSON;
-  if (json == nullptr) {
-    std::filesystem::remove_all(CACHE_ROOT);
-    return;
-  }
-  for (auto item = json.begin(); item != json.end(); item++) {
-    auto path = item.key();
-    auto value = json[path];
-    if (value.is_string()) {
-      CheckCache(path, value.get<std::string>());
-      continue;
-    }
-  }
-}
-
-void Baseline::SetUp() {
-  std::ifstream baselineFile(BASELINE_JSON_PATH);
-  if (!baselineFile) {
-    BaselineJSON = {};
-  } else {
-    baselineFile >> BaselineJSON;
-  }
-
-  CleanInvalidCaches();
-}
-
-void Baseline::TearDown() {
-  if (BaselineJSON != nullptr) {
-    std::ofstream outFile(BASELINE_JSON_PATH);
-    outFile << std::setw(4) << BaselineJSON << std::endl;
-    outFile.close();
-  }
-}
-
-std::shared_ptr<Data> LoadBaselineData(const std::string& key) {
-  std::filesystem::path filePath(BASELINE_ROOT + key);
-  std::filesystem::path cachePath(CACHE_ROOT + key);
-  cachePath = cachePath.replace_extension("rgba");
-  if (std::filesystem::exists(cachePath)) {
-    return Data::MakeFromFile(cachePath);
-  }
-  auto image = Image::MakeFrom(filePath);
+std::shared_ptr<Data> LoadImageData(const std::string& key) {
+  auto image = Image::MakeFrom(BASELINE_ROOT + key);
   if (image == nullptr) {
     return nullptr;
   }
-  auto info = ImageInfo::Make(image->width(), image->height(), ColorType::RGBA_8888);
+  auto info = MakeInfo(image->width(), image->height());
   auto pixels = new uint8_t[info.byteSize()];
   auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
   if (!image->readPixels(info, pixels)) {
     return nullptr;
   }
-  std::filesystem::create_directories(cachePath.parent_path());
-  std::ofstream out(cachePath.string());
-  out.write(reinterpret_cast<const char*>(data->data()), data->size());
-  out.close();
-  auto writeTime = std::filesystem::last_write_time(filePath);
-  auto timestamp =
-      std::chrono::duration_cast<std::chrono::microseconds>(writeTime.time_since_epoch()).count();
-  BaselineJSON[key] = std::to_string(timestamp);
   return data;
+}
+
+std::shared_ptr<Data> LoadPixelData(std::shared_ptr<PixelBuffer> pixelBuffer) {
+  if (pixelBuffer == nullptr) {
+    return nullptr;
+  }
+  auto srcPixels = pixelBuffer->lockPixels();
+  PixelMap pixelMap(pixelBuffer->info(), srcPixels);
+  auto info = MakeInfo(pixelBuffer->width(), pixelBuffer->height());
+  auto pixels = new uint8_t[info.byteSize()];
+  auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
+  auto result = pixelMap.readPixels(info, pixels);
+  pixelBuffer->unlockPixels();
+  return result ? data : nullptr;
+}
+
+static void SaveImage(const ImageInfo& info, const void* pixels, const std::string& path) {
+  auto bytes = Image::Encode(info, pixels, EncodedFormat::PNG, 100);
+  if (bytes) {
+    std::filesystem::path filePath = path;
+    std::filesystem::create_directories(filePath.parent_path());
+    std::ofstream out(path);
+    out.write(reinterpret_cast<const char*>(bytes->data()), bytes->size());
+    out.close();
+  }
 }
 
 bool Baseline::Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::string& pngPath) {
   bool result = true;
-  auto baselineData = LoadBaselineData(pngPath);
+  auto baselineData = LoadImageData(pngPath);
+  auto pixelData = LoadPixelData(pixelBuffer);
   if (baselineData != nullptr && pixelBuffer != nullptr) {
     auto baseline = baselineData->bytes();
-    auto pixels = reinterpret_cast<uint8_t*>(pixelBuffer->lockPixels());
-    auto byteSize = pixelBuffer->byteSize();
+    auto pixels = pixelData->bytes();
+    auto byteSize = pixelData->size();
     for (size_t index = 0; index < byteSize; index++) {
       auto pixelA = pixels[index];
       auto pixelB = baseline[index];
@@ -126,13 +86,13 @@ bool Baseline::Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::stri
         break;
       }
     }
-    pixelBuffer->unlockPixels();
   } else {
     result = false;
   }
   if (!result) {
     auto outPath = OUT_ROOT + pngPath;
-    Trace(pixelBuffer, outPath);
+    auto info = MakeInfo(pixelBuffer->width(), pixelBuffer->height());
+    SaveImage(info, pixelData->data(), outPath);
   }
   return result;
 }
