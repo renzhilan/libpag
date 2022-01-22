@@ -519,13 +519,11 @@ PAG_TEST_F(PAGFileTimeStretchTest, Repeat) {
   //第1帧
   pagFile->setCurrentTime(1000000ll / 30 + 1);
   pagPlayer->flush();
-  auto snapshot_1 = MakeSnapshot(pagSurface);
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Repeat_1.png"));
   //第61帧
   pagFile->setCurrentTime(2000000ll + 1000000ll / 30 + 1);
   pagPlayer->flush();
-  auto snapshot_61 = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot_1, "PAGFileTimeStretchTest/Repeat_1.png"));
-  EXPECT_TRUE(Baseline::Compare(snapshot_61, "PAGFileTimeStretchTest/Repeat_1.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Repeat_1.png"));
 }
 
 /**
@@ -541,14 +539,12 @@ PAG_TEST_F(PAGFileTimeStretchTest, RepeatInverted) {
   //第1帧
   pagFile->setCurrentTime(1000000ll / 30 + 1);
   pagPlayer->flush();
-  auto snapshot_1 = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot_1, "PAGFileTimeStretchTest/RepeateInverted_1.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/RepeateInverted_1.png"));
 
   //第198帧
   pagFile->setCurrentTime(2000000ll - 2 * 1000000ll / 30 + 2000000ll);
   pagPlayer->flush();
-  auto snapshot_198 = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot_198, "PAGFileTimeStretchTest/RepeateInverted_198.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/RepeateInverted_198.png"));
 }
 
 /**
@@ -563,28 +559,23 @@ PAG_TEST_F(PAGFileTimeStretchTest, Scale) {
   //第30帧
   pagFile->setCurrentTime(30 * 1000000ll / 30 + 1);
   pagPlayer->flush();
-  auto snapshot_30 = MakeSnapshot(pagSurface);
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_30.png"));
 
   //第12帧
   pagFile->setCurrentTime(12 * 1000000ll / 30 + 1);
   pagPlayer->flush();
-  auto snapshto_12 = MakeSnapshot(pagSurface);
-
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_12.png"));
   pagFile->setDuration(pagFile->duration() * 2);
 
   //第90帧
   pagFile->setCurrentTime(4000000ll - 30 * 1000000ll / 30);
   pagPlayer->flush();
-  auto snapshot_90 = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot_30, "PAGFileTimeStretchTest/Scale_30.png"));
-  EXPECT_TRUE(Baseline::Compare(snapshot_90, "PAGFileTimeStretchTest/Scale_30.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_30.png"));
   //第17帧
   //计算会有一定误差：现在的结果是10->10 13->11 17->12
   pagFile->setCurrentTime(17 * 1000000ll / 30 + 1);
   pagPlayer->flush();
-  auto snapshot_17 = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshto_12, "PAGFileTimeStretchTest/Scale_12.png"));
-  EXPECT_TRUE(Baseline::Compare(snapshot_17, "PAGFileTimeStretchTest/Scale_12.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_12.png"));
 }
 
 /**

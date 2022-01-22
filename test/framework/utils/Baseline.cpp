@@ -45,20 +45,6 @@ std::shared_ptr<Data> LoadImageData(const std::string& key) {
   return data;
 }
 
-std::shared_ptr<Data> LoadPixelData(std::shared_ptr<PixelBuffer> pixelBuffer) {
-  if (pixelBuffer == nullptr) {
-    return nullptr;
-  }
-  auto srcPixels = pixelBuffer->lockPixels();
-  PixelMap pixelMap(pixelBuffer->info(), srcPixels);
-  auto info = MakeInfo(pixelBuffer->width(), pixelBuffer->height());
-  auto pixels = new uint8_t[info.byteSize()];
-  auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
-  auto result = pixelMap.readPixels(info, pixels);
-  pixelBuffer->unlockPixels();
-  return result ? data : nullptr;
-}
-
 static void SaveImage(const ImageInfo& info, const void* pixels, const std::string& path) {
   auto bytes = Image::Encode(info, pixels, EncodedFormat::PNG, 100);
   if (bytes) {
@@ -70,29 +56,62 @@ static void SaveImage(const ImageInfo& info, const void* pixels, const std::stri
   }
 }
 
-bool Baseline::Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::string& pngPath) {
-  bool result = true;
-  auto baselineData = LoadImageData(pngPath);
-  auto pixelData = LoadPixelData(pixelBuffer);
-  if (baselineData != nullptr && pixelBuffer != nullptr) {
-    auto baseline = baselineData->bytes();
-    auto pixels = pixelData->bytes();
-    auto byteSize = pixelData->size();
-    for (size_t index = 0; index < byteSize; index++) {
-      auto pixelA = pixels[index];
-      auto pixelB = baseline[index];
-      if (abs(pixelA - pixelB) > 2) {
-        result = false;
-        break;
-      }
-    }
-  } else {
-    result = false;
+bool ComparePixelData(std::shared_ptr<Data> pixelData, const std::string& pngPath) {
+  if (pixelData == nullptr) {
+    return false;
   }
+  auto baselineData = LoadImageData(pngPath);
+  if (baselineData == nullptr || pixelData->size() != baselineData->size()) {
+    return false;
+  }
+  auto baseline = baselineData->bytes();
+  auto pixels = pixelData->bytes();
+  auto byteSize = pixelData->size();
+  for (size_t index = 0; index < byteSize; index++) {
+    auto pixelA = pixels[index];
+    auto pixelB = baseline[index];
+    if (abs(pixelA - pixelB) > 2) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool Baseline::Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::string& pngPath) {
+  if (pixelBuffer == nullptr) {
+    return false;
+  }
+  auto srcPixels = pixelBuffer->lockPixels();
+  PixelMap pixelMap(pixelBuffer->info(), srcPixels);
+  auto info = MakeInfo(pixelBuffer->width(), pixelBuffer->height());
+  auto pixels = new uint8_t[info.byteSize()];
+  auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
+  auto result = pixelMap.readPixels(info, pixels);
+  pixelBuffer->unlockPixels();
   if (!result) {
-    auto outPath = OUT_ROOT + pngPath;
-    auto info = MakeInfo(pixelBuffer->width(), pixelBuffer->height());
-    SaveImage(info, pixelData->data(), outPath);
+    return false;
+  }
+  result = ComparePixelData(data, pngPath);
+  if (!result) {
+    SaveImage(info, data->data(), OUT_ROOT + pngPath);
+  }
+  return result;
+}
+
+bool Baseline::Compare(std::shared_ptr<PAGSurface> surface, const std::string& pngPath) {
+  if (surface == nullptr) {
+    return false;
+  }
+  auto info = MakeInfo(surface->width(), surface->height());
+  auto pixels = new uint8_t[info.byteSize()];
+  auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
+  auto result = surface->readPixels(info.colorType(), info.alphaType(), pixels, info.rowBytes());
+  if (!result) {
+    return false;
+  }
+  result = ComparePixelData(data, pngPath);
+  if (!result) {
+    SaveImage(info, data->data(), OUT_ROOT + pngPath);
   }
   return result;
 }

@@ -19,14 +19,13 @@
 #pragma once
 
 #include "image/PixelBuffer.h"
+#include "pag/pag.h"
 
 namespace pag {
 class Baseline {
  public:
-  static void SetUp();
-
-  static void TearDown();
-
   static bool Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::string& pngPath);
+
+  static bool Compare(std::shared_ptr<PAGSurface> surface, const std::string& pngPath);
 };
 }  // namespace pag

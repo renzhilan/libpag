@@ -72,8 +72,7 @@ PAG_TEST_F(PAGImageTest, image) {
   TestPAGFile->setCurrentTime(3000000);
   imageLayer->replaceImage(image);
   TestPAGPlayer->flush();
-  auto snapshot = getSnapshot();
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGImageTest/image.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageTest/image.png"));
 }
 
 /**
@@ -120,7 +119,6 @@ PAG_TEST_F(PAGImageTest, image3) {
   player->setSurface(surface);
   auto result = player->flush();
   EXPECT_TRUE(result);
-  auto snapshot = MakeSnapshot(surface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGImageTest/image3.png"));
+  EXPECT_TRUE(Baseline::Compare(surface, "PAGImageTest/image3.png"));
 }
 }  // namespace pag

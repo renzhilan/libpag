@@ -72,11 +72,4 @@ std::string PAGCpuTest::getMd5FromSnap() {
   return DumpMD5(TestPAGSurface);
 }
 
-std::shared_ptr<PixelBuffer> PAGCpuTest::getSnapshot() {
-  if (TestPAGSurface == nullptr) {
-    return nullptr;
-  }
-  return MakeSnapshot(TestPAGSurface);
-}
-
 }  // namespace pag

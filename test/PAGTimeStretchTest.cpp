@@ -75,11 +75,9 @@ void TimeStretchTest(std::string path, std::string methodName, float scaleFactor
     pagPlayer->setProgress((currentFrame + 0.1) * 1.0 / totalFrames);
     pagPlayer->getProgress();
     pagPlayer->flush();
-
-    auto snapshot = MakeSnapshot(pagSurface);
     auto compareResult =
-        Baseline::Compare(snapshot, "PAGTimeStrechTest/" + methodName + "_" + fileName + "_" +
-                                       std::to_string(currentFrame) + ".png");
+        Baseline::Compare(pagSurface, "PAGTimeStrechTest/" + methodName + "_" + fileName + "_" +
+                                          std::to_string(currentFrame) + ".png");
     EXPECT_TRUE(compareResult);
     if (!compareResult) {
       errorMsg += (std::to_string(currentFrame) + ";");

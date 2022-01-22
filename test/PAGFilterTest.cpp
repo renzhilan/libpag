@@ -40,8 +40,7 @@ PAG_TEST(PAGFilterTest, CornerPin) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/CornerPin.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/CornerPin.png"));
 }
 
 /**
@@ -58,8 +57,7 @@ PAG_TEST(PAGFilterTest, Bulge) {
 
   pagFile->setCurrentTime(300000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/Bulge.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/Bulge.png"));
 }
 
 /**
@@ -76,8 +74,7 @@ PAG_TEST(PAGFilterTest, MotionTile) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/MotionTile.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/MotionTile.png"));
 }
 
 /**
@@ -100,12 +97,11 @@ PAG_TEST(PAGFilterTest, MotionBlur) {
 
   pagFile->setCurrentTime(200000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/MotionBlur_200000.png"));
 
   pagFile->setCurrentTime(600000);
   pagPlayer->flush();
-  snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/MotionBlur.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/MotionBlur_600000.png"));
 }
 
 /**
@@ -122,9 +118,7 @@ PAG_TEST(PAGFilterTest, GaussBlur) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/GaussBlur_FastBlur.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/GaussBlur_FastBlur.png"));
 
   pagFile = PAGFile::Load("../resources/filter/fastblur_norepeat.pag");
   ASSERT_NE(pagFile, nullptr);
@@ -136,9 +130,7 @@ PAG_TEST(PAGFilterTest, GaussBlur) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  snapshot = MakeSnapshot(pagSurface);
-
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/GaussBlur_FastBlur_NoRepeat.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/GaussBlur_FastBlur_NoRepeat.png"));
 }
 
 /**
@@ -155,8 +147,7 @@ PAG_TEST(PAGFilterTest, Glow) {
 
   pagFile->setCurrentTime(200000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/Glow.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/Glow.png"));
 }
 
 /**
@@ -174,8 +165,7 @@ PAG_TEST(PAGFilterTest, DropShadow) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/DropShadow.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/DropShadow.png"));
 }
 
 /**
@@ -192,8 +182,7 @@ PAG_TEST(PAGFilterTest, DisplacementMap) {
 
   pagFile->setCurrentTime(600000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/DisplacementMap.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/DisplacementMap.png"));
 }
 
 /**
@@ -210,8 +199,7 @@ PAG_TEST(PAGFilterTest, DisplacementMap_Scale) {
 
   pagFile->setCurrentTime(3632520);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/DisplacementMap_Scale.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/DisplacementMap_Scale.png"));
 }
 
 /**
@@ -228,8 +216,7 @@ PAG_TEST(PAGFilterTest, GaussBlur_Static) {
 
   pagFile->setCurrentTime(0);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/GaussBlur_Static.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/GaussBlur_Static.png"));
 }
 
 /**
@@ -246,8 +233,7 @@ PAG_TEST(PAGFilterTest, RadialBlur) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/RadialBlur.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/RadialBlur.png"));
 }
 
 /**
@@ -264,8 +250,7 @@ PAG_TEST(PAGFilterTest, Mosaic) {
 
   pagFile->setCurrentTime(0);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/Mosaic.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/Mosaic.png"));
 }
 
 /**
@@ -282,8 +267,7 @@ PAG_TEST(PAGFilterTest, MultiFilter) {
 
   pagFile->setCurrentTime(1000000);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/MultiFilter_CornerPin_Bulge.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/MultiFilter_CornerPin_Bulge.png"));
 
   pagFile = PAGFile::Load("../resources/filter/motiontile_blur.pag");
   ASSERT_NE(pagFile, nullptr);
@@ -295,7 +279,6 @@ PAG_TEST(PAGFilterTest, MultiFilter) {
 
   pagFile->setCurrentTime(400000);
   pagPlayer->flush();
-  snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGFilterTest/MultiFilter_Motiontile_Blur.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFilterTest/MultiFilter_Motiontile_Blur.png"));
 }
 }  // namespace pag

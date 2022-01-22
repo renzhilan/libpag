@@ -66,8 +66,6 @@ class PAGCpuTest : public testing::Test {
 
   static std::string getMd5FromSnap();
 
-  static std::shared_ptr<PixelBuffer> getSnapshot();
-
  private:
   GTEST_DISALLOW_COPY_AND_ASSIGN_(PAGCpuTest);
 };

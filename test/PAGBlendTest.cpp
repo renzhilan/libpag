@@ -45,8 +45,7 @@ PAG_TEST_F(PAGBlendTest, Blend) {
     auto found = file.find_last_of("/\\");
     auto suffixIndex = file.rfind('.');
     auto fileName = file.substr(found + 1, suffixIndex - found - 1);
-    auto snapshot = MakeSnapshot(pagSurface);
-    EXPECT_TRUE(Baseline::Compare(snapshot, "PAGBlendTest/Blend_"+ fileName +".png"));
+    EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGBlendTest/Blend_"+ fileName +".png"));
   }
 }
 
@@ -91,8 +90,7 @@ PAG_TEST_F(PAGBlendTest, CopyDstTexture) {
   pagPlayer->setMatrix(Matrix::I());
   pagPlayer->setProgress(0.5);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGBlendTest/CopyDstTexture.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGBlendTest/CopyDstTexture.png"));
 
   context = device->lockContext();
   gl = GLContext::Unwrap(context);
@@ -127,8 +125,7 @@ PAG_TEST_F(PAGBlendTest, TextureBottomLeft) {
   pagPlayer->setMatrix(Matrix::I());
   pagPlayer->setProgress(0.34);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGBlendTest/TextureBottomLeft.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGBlendTest/TextureBottomLeft.png"));
 
   context = device->lockContext();
   gl = GLContext::Unwrap(context);
@@ -169,8 +166,7 @@ PAG_TEST_F(PAGBlendTest, BothBottomLeft) {
   pagPlayer->setMatrix(Matrix::I());
   pagPlayer->setProgress(0.3);
   pagPlayer->flush();
-  auto snapshot = MakeSnapshot(pagSurface);
-  EXPECT_TRUE(Baseline::Compare(snapshot, "PAGBlendTest/BothBottomLeft.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGBlendTest/BothBottomLeft.png"));
 
   context = device->lockContext();
   ASSERT_TRUE(context != nullptr);
