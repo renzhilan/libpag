@@ -60,10 +60,10 @@ PAG_TEST_F(PAGPlayerTest, pagPlayer) {
   auto pagComposition2 = std::static_pointer_cast<PAGComposition>(pagFile2->getLayerAt(0));
   TestPAGPlayer->setComposition(pagComposition2);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGPlayerTest/pagPlayer_setComposition.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGPlayerTest/pagPlayer_setComposition.webp"));
   TestPAGPlayer->setComposition(container);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGPlayerTest/pagPlayer_setComposition2.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGPlayerTest/pagPlayer_setComposition2.webp"));
 }
 
 /**
@@ -89,7 +89,7 @@ PAG_TEST_F(PAGPlayerTest, switchPAGSurface) {
 
   delete pagPlayer1;
   delete pagPlayer2;
-  EXPECT_TRUE(Baseline::Compare(pagSurface1, "PAGPlayerTest/switchPAGSurface.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface1, "PAGPlayerTest/switchPAGSurface.webp"));
 }
 
 /**
@@ -116,13 +116,13 @@ PAG_TEST_F(PAGPlayerTest, autoClear) {
   result = pagSurface->readPixels(pixelMap.colorType(), pixelMap.alphaType(), lock.pixels(),
                                   pixelMap.rowBytes());
   ASSERT_TRUE(result);
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGPlayerTest/autoClear_autoClear_false_flush0.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGPlayerTest/autoClear_autoClear_false_flush0.webp"));
 
   pagPlayer->flush();
   result = pagSurface->readPixels(pixelMap.colorType(), pixelMap.alphaType(), lock.pixels(),
                                   pixelMap.rowBytes());
   ASSERT_TRUE(result);
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGPlayerTest/autoClear_autoClear_false_flush1.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGPlayerTest/autoClear_autoClear_false_flush1.webp"));
 
   pagPlayer->setAutoClear(true);
   pagPlayer->flush();
@@ -130,7 +130,7 @@ PAG_TEST_F(PAGPlayerTest, autoClear) {
                                   pixelMap.rowBytes());
   ASSERT_TRUE(result);
 
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGPlayerTest/autoClear_autoClear_true.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGPlayerTest/autoClear_autoClear_true.webp"));
 }
 
 }  // namespace pag

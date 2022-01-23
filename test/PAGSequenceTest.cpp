@@ -36,7 +36,7 @@ void pagSequenceTest() {
   pagPlayer->setProgress(0.5);
   pagPlayer->flush();
   EXPECT_EQ(static_cast<int>(pagPlayer->renderCache->sequenceCaches.size()), 1);
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSequenceTest/pagSequenceTest.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSequenceTest/pagSequenceTest.webp"));
 }
 
 /**
@@ -59,7 +59,7 @@ PAG_TEST_F(PAGSequenceTest, BitmapSequenceReader) {
   pagPlayer->flush();
   pagPlayer->setProgress(0.75);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSequenceTest/BitmapSequenceReader.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSequenceTest/BitmapSequenceReader.webp"));
 }
 
 /**
@@ -73,6 +73,6 @@ PAG_TEST_F(PAGSequenceTest, VideoSequenceAsMask) {
   pagPlayer->setComposition(pagFile);
   pagPlayer->setProgress(0.2);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSequenceTest/VideoSequenceAsMask.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSequenceTest/VideoSequenceAsMask.webp"));
 }
 }  // namespace pag

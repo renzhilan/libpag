@@ -69,7 +69,7 @@ PAG_TEST(PAGSmokeTest, RenderFrames) {
 
       auto snapshot = MakeSnapshot(pagSurface);
       auto result =
-          Baseline::Compare(snapshot, "PAGSmokeTest/" + std::to_string(currentFrame) + ".png");
+          Baseline::Compare(snapshot, "PAGSmokeTest/" + std::to_string(currentFrame) + ".webp");
       if (!result) {
         errorMsg += (std::to_string(currentFrame) + ";");
       }

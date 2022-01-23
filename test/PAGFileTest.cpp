@@ -403,28 +403,28 @@ PAG_TEST_F(PAGFileContainerTest, ContainerEditing) {
 
   TestPAGFile->swapLayer(imageLayer1, imageLayer2);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/swapLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/swapLayer.webp"));
 
   TestPAGFile->swapLayerAt(2, 3);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/swapLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/swapLayerAt.webp"));
 
   TestPAGFile->setLayerIndex(imageLayer1, 3);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/setLayerIndex.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/setLayerIndex.webp"));
 
   TestPAGFile->removeLayer(imageLayer1);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/removeLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/removeLayer.webp"));
 
   TestPAGFile->removeLayerAt(2);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/removeLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/removeLayerAt.webp"));
 
   TestPAGFile->removeAllLayers();
   TestPAGPlayer->flush();
   ASSERT_EQ(TestPAGFile->numChildren(), 0);
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/removeAllLayers.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/removeAllLayers.webp"));
 
   auto pagFile2 = PAGFile::Load(DEFAULT_PAG_PATH);
   auto root2 = pagFile2;
@@ -433,13 +433,13 @@ PAG_TEST_F(PAGFileContainerTest, ContainerEditing) {
   imageLayer->setCurrentTime(2000000);
   TestPAGFile->addLayer(imageLayer);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/addLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/addLayer.webp"));
 
   auto pagLayer = pagComposition2->getLayerAt(3);
   pagLayer->setCurrentTime(4000000);
   TestPAGFile->addLayerAt(pagLayer, 0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/addLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileContainerTest/addLayerAt.webp"));
 
   TestPAGFile->contains(nullptr);
   TestPAGFile->removeLayer(nullptr);
@@ -467,11 +467,11 @@ PAG_TEST_F(PAGFileTimeStretchTest, Repeat) {
   //第1帧
   pagFile->setCurrentTime(1000000ll / 30 + 1);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Repeat_1.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Repeat_1.webp"));
   //第61帧
   pagFile->setCurrentTime(2000000ll + 1000000ll / 30 + 1);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Repeat_1.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Repeat_1.webp"));
 }
 
 /**
@@ -487,12 +487,12 @@ PAG_TEST_F(PAGFileTimeStretchTest, RepeatInverted) {
   //第1帧
   pagFile->setCurrentTime(1000000ll / 30 + 1);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/RepeateInverted_1.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/RepeateInverted_1.webp"));
 
   //第198帧
   pagFile->setCurrentTime(2000000ll - 2 * 1000000ll / 30 + 2000000ll);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/RepeateInverted_198.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/RepeateInverted_198.webp"));
 }
 
 /**
@@ -507,23 +507,23 @@ PAG_TEST_F(PAGFileTimeStretchTest, Scale) {
   //第30帧
   pagFile->setCurrentTime(30 * 1000000ll / 30 + 1);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_30.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_30.webp"));
 
   //第12帧
   pagFile->setCurrentTime(12 * 1000000ll / 30 + 1);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_12.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_12.webp"));
   pagFile->setDuration(pagFile->duration() * 2);
 
   //第90帧
   pagFile->setCurrentTime(4000000ll - 30 * 1000000ll / 30);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_30.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_30.webp"));
   //第17帧
   //计算会有一定误差：现在的结果是10->10 13->11 17->12
   pagFile->setCurrentTime(17 * 1000000ll / 30 + 1);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_12.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGFileTimeStretchTest/Scale_12.webp"));
 }
 
 /**
@@ -571,7 +571,7 @@ PAG_TEST_F(PAGFileBaseTest, ShapeType) {
   TestPAGPlayer->setComposition(testFile);
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/ShapeType.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/ShapeType.webp"));
 }
 
 /**
@@ -635,7 +635,7 @@ PAG_TEST_F(PAGFileBaseTest, EllipseToPath_ID80701969) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/EllipseToPath.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/EllipseToPath.webp"));
 }
 
 /**
@@ -646,7 +646,7 @@ PAG_TEST_F(PAGFileBaseTest, RectToPath) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/RectToPath.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/RectToPath.webp"));
 }
 
 /**
@@ -657,7 +657,7 @@ PAG_TEST_F(PAGFileBaseTest, RoundRectToPath) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/RoundRectToPath.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/RoundRectToPath.webp"));
 }
 
 /**
@@ -669,6 +669,6 @@ PAG_TEST_F(PAGFileBaseTest, SetStartTime) {
   pagFile->setStartTime(2000000);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/SetStartTime.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGFileBaseTest/SetStartTime.webp"));
 }
 }  // namespace pag

@@ -146,7 +146,7 @@ PAG_TEST_F(PAGLayerTest, trackMatte) {
   TestPAGFile->setCurrentTime(800 * 1000);
   ASSERT_EQ(TestPAGFile->currentTime(), 800 * 1000);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/trackMatte.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/trackMatte.webp"));
 }
 
 /**
@@ -160,7 +160,7 @@ PAG_TEST_F(PAGLayerTest, visible) {
   ASSERT_NE(textLayer1, nullptr);
   textLayer1->setVisible(false);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/visible.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/visible.webp"));
 }
 
 /**
@@ -182,7 +182,7 @@ PAG_TEST_F(PAGLayerTest, matrix) {
   mtx.preScale(2, 2);
   textLayer2->setMatrix(mtx);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/matrix.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/matrix.webp"));
 }
 
 /**
@@ -192,7 +192,7 @@ PAG_TEST_F(PAGLayerTest, nextFrame) {
   TestPAGFile->setCurrentTime(1960000ll);
   TestPAGFile->nextFrame();
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/nextFrame.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/nextFrame.webp"));
 }
 
 /**
@@ -203,7 +203,7 @@ PAG_TEST_F(PAGLayerTest, preFrame) {
   TestPAGFile->nextFrame();
   TestPAGFile->preFrame();
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/preFrame.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/preFrame.webp"));
 }
 
 PAG_TEST_CASE_WITH_PATH(PAGLayerFrameTest, "../assets/repeater.pag")
@@ -231,7 +231,7 @@ PAG_TEST_F(PAGLayerTest, AlphaMask) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0.78);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/AlphaMask.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGLayerTest/AlphaMask.webp"));
 }
 
 /**
@@ -258,7 +258,7 @@ PAG_TEST_F(PAGLayerTest, TextScale) {
   pagPlayer->setMatrix(matrix);
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGLayerTest/TextScale.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGLayerTest/TextScale.webp"));
 }
 
 /**
@@ -276,6 +276,6 @@ PAG_TEST_F(PAGLayerTest, Opacity) {
   pagPlayer->setComposition(pagFile);
   pagPlayer->setProgress(0.5f);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGLayerTest/Opacity.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGLayerTest/Opacity.webp"));
 }
 }  // namespace pag

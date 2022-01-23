@@ -36,7 +36,7 @@ PAG_TEST_F(PAGGradientColorTest, GradientColor_ID84028439) {
     TestPAGPlayer->setProgress(0.5);
     TestPAGPlayer->flush();
     std::filesystem::path path(file);
-    auto key = path.filename().replace_extension("png");
+    auto key = path.filename().replace_extension("webp");
     EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGGradientColorTest/" + key.string()));
   }
 }

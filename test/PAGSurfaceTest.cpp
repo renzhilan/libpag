@@ -74,7 +74,7 @@ PAG_TEST(PAGSurfaceTest, FromTexture) {
     EXPECT_TRUE(semaphore.isInitialized());
     EXPECT_NE(semaphore.glSync(), nullptr);
     EXPECT_TRUE(pagPlayer2->wait(semaphore));
-    EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSurfaceTest/FromTexture.png"));
+    EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSurfaceTest/FromTexture.webp"));
   }
 }
 
@@ -101,7 +101,7 @@ PAG_TEST(PAGSurfaceTest, Mask) {
   pagPlayer->setMatrix(Matrix::I());
   pagPlayer->setProgress(0.9);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSurfaceTest/Mask.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSurfaceTest/Mask.webp"));
 
   context = device->lockContext();
   ASSERT_TRUE(context != nullptr);

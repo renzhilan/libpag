@@ -76,7 +76,7 @@ void TimeStretchTest(std::string path, std::string methodName, float scaleFactor
     pagPlayer->flush();
     auto compareResult =
         Baseline::Compare(pagSurface, "PAGTimeStrechTest/" + methodName + "_" + fileName + "_" +
-                                          std::to_string(currentFrame) + ".png");
+                                          std::to_string(currentFrame) + ".webp");
     EXPECT_TRUE(compareResult);
     if (!compareResult) {
       errorMsg += (std::to_string(currentFrame) + ";");

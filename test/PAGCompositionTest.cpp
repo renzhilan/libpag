@@ -50,46 +50,46 @@ PAG_TEST_F(PAGCompositionTest, composition) {
 
   pagComposition->swapLayer(imageLayer1, imageLayer2);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_swapLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_swapLayer.webp"));
 
   pagComposition->swapLayerAt(2, 3);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_swapLayerAt.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_swapLayerAt.webp"));
 
   pagComposition->setLayerIndex(imageLayer1, 3);
   TestPAGPlayer->flush();
   EXPECT_TRUE(
-      Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_setLayerIndex.png"));
+      Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_setLayerIndex.webp"));
 
   pagComposition->removeLayer(imageLayer1);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_removeLayer.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_removeLayer.webp"));
 
   pagComposition->removeLayerAt(2);
   TestPAGPlayer->flush();
   EXPECT_TRUE(
-      Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_removeLayerAt.png"));
+      Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_removeLayerAt.webp"));
 
   pagComposition->removeAllLayers();
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.webp"));
 
   auto pagFile2 = PAGFile::Load(DEFAULT_PAG_PATH);
   auto pagComposition2 = std::static_pointer_cast<PAGComposition>(pagFile2->getLayerAt(0));
   auto imageLayer = pagComposition2->getLayerAt(2);
   pagComposition->addLayer(imageLayer);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.webp"));
 
   pagComposition->addLayerAt(pagComposition2->getLayerAt(3), 0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.webp"));
 
   pagComposition->setContentSize(300, 300);
   ASSERT_EQ(pagComposition->width(), 300);
   ASSERT_EQ(pagComposition->height(), 300);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGCompositionTest/composition_empty.webp"));
 }
 
 PAG_TEST_SUIT_WITH_PATH(VideoSequenceSize, "../resources/apitest/video_sequence_size.pag")
@@ -101,7 +101,7 @@ PAG_TEST_F(VideoSequenceSize, VideoSequence) {
   TestPAGFile->setMatrix(Matrix::MakeScale(0.8625));
   TestPAGPlayer->setProgress(0.5);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "VideoSequenceSize/VideoSequence.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "VideoSequenceSize/VideoSequence.webp"));
 }
 
 // ContainerTest 中会操作容器，所以此处需要声明为case，不能声明为suit

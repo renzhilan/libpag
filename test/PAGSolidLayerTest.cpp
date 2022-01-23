@@ -39,7 +39,7 @@ PAG_TEST_F(PAGSolidLayerTest, SolidColor) {
   solidLayer->setSolidColor(Red);
   ASSERT_EQ(Red, solidLayer->solidColor());
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGSolidLayerTest/SolidColor.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGSolidLayerTest/SolidColor.webp"));
 }
 
 }  // namespace pag

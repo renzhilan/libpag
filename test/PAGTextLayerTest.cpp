@@ -43,7 +43,7 @@ PAG_TEST_F(PAGTextLayerTest, fillColor) {
   auto fillColor = textLayer->fillColor();
   EXPECT_TRUE(fillColor == Blue);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/fillColor.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/fillColor.webp"));
   // 色值限定uint_8输入，天然合法
   textLayer->setFillColor(Red);
   EXPECT_TRUE((textLayer->fillColor() == Red));
@@ -62,7 +62,7 @@ PAG_TEST_F(PAGTextLayerTest, strokeColor) {
   auto strokeColor = textLayer->strokeColor();
   EXPECT_TRUE((strokeColor == Red));
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/strokeColor.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/strokeColor.webp"));
   textLayer->setStrokeColor(Blue);
   EXPECT_TRUE((textLayer->strokeColor() == Blue));
 }
@@ -110,7 +110,7 @@ PAG_TEST_F(PAGTextLayerTest, textDocument) {
   ASSERT_NE(TestPAGFile, nullptr);
   TestPAGFile->setCurrentTime(5 * 1000000);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textDocument.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textDocument.webp"));
 }
 
 /**
@@ -179,7 +179,7 @@ PAG_TEST_F(PAGTextLayerTest, Emoji_ID79762747) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/Emoji.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/Emoji.webp"));
 }
 
 /**
@@ -193,7 +193,7 @@ PAG_TEST_F(PAGTextLayerTest, NormalEmoji) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/NormalEmoji.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/NormalEmoji.webp"));
 }
 
 /**
@@ -208,7 +208,7 @@ PAG_TEST_F(PAGTextLayerTest, TextReplacement) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/TextReplacement.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/TextReplacement.webp"));
 }
 
 /**
@@ -219,7 +219,7 @@ PAG_TEST_F(PAGTextLayerTest, VerticalText_ID80511765) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textDirection.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textDirection.webp"));
 }
 
 /**
@@ -230,7 +230,7 @@ PAG_TEST_F(PAGTextLayerTest, TrackingAnimator_ID859317799) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/trackingAnimator.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/trackingAnimator.webp"));
 }
 
 /**
@@ -241,7 +241,7 @@ PAG_TEST_F(PAGTextLayerTest, TrackingAnimatorVertical_ID859317799) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/trackingAnimatorVertical.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/trackingAnimatorVertical.webp"));
 }
 
 /**
@@ -252,7 +252,7 @@ PAG_TEST_F(PAGTextLayerTest, PositionAnimator) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/PositionAnimator.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/PositionAnimator.webp"));
 }
 
 /**
@@ -263,7 +263,7 @@ PAG_TEST_F(PAGTextLayerTest, TextAnimators_ID863204853) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimators.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimators.webp"));
 }
 
 /**
@@ -274,7 +274,7 @@ PAG_TEST_F(PAGTextLayerTest, TextAnimatorsMode_ID863204817) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorMode.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorMode.webp"));
 
   auto file = pagFile->getFile();
   auto text = file->getTextAt(0);
@@ -299,7 +299,7 @@ PAG_TEST_F(PAGTextLayerTest, TextAnimatorsX7_ID863204817) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorX7.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorX7.webp"));
 
   auto bytes = Codec::Encode(pagFile->getFile());
   ASSERT_NE(bytes->data(), nullptr);
@@ -308,7 +308,7 @@ PAG_TEST_F(PAGTextLayerTest, TextAnimatorsX7_ID863204817) {
   TestPAGPlayer->setComposition(newPagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorX7.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorX7.webp"));
 }
 
 /**
@@ -319,7 +319,7 @@ PAG_TEST_F(PAGTextLayerTest, TextAnimatorSmooth_ID863204817) {
   TestPAGPlayer->setComposition(pagFile);
   TestPAGPlayer->setProgress(0);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorSmooth.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGTextLayerTest/textAnimatorSmooth.webp"));
 }
 
 /**

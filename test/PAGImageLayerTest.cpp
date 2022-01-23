@@ -42,13 +42,13 @@ PAG_TEST_F(PAGImageLayerTest, imageBasetTest) {
   EXPECT_TRUE(pag == nullptr);
   imageLayer->replaceImage(file);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement_Empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement_Empty.webp"));
   imageLayer->replaceImage(pag);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement_Empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement_Empty.webp"));
   imageLayer->replaceImage(nullptr);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement_Empty.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement_Empty.webp"));
 }
 
 /**
@@ -84,7 +84,7 @@ PAG_TEST_F(PAGImageLayerTest, imageMultiThreadReplace) {
 
   imageLayer->replaceImage(image);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageLayerTest/ImageReplacement.webp"));
 }
 
 /**

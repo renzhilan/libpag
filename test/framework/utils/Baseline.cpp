@@ -46,7 +46,7 @@ std::shared_ptr<Data> LoadImageData(const std::string& key) {
 }
 
 static void SaveImage(const ImageInfo& info, const void* pixels, const std::string& path) {
-  auto bytes = Image::Encode(info, pixels, EncodedFormat::PNG, 100);
+  auto bytes = Image::Encode(info, pixels, EncodedFormat::WEBP, 100);
   if (bytes) {
     std::filesystem::path filePath = path;
     std::filesystem::create_directories(filePath.parent_path());
@@ -86,7 +86,7 @@ bool Baseline::Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::stri
   auto info = MakeInfo(pixelBuffer->width(), pixelBuffer->height());
   auto pixels = new uint8_t[info.byteSize()];
   auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
-  auto result = pixelMap.readPixels(info, pixels);
+  auto result = pixelMap.readPixels(info.makeAlphaType(AlphaType::Premultiplied), pixels);
   pixelBuffer->unlockPixels();
   if (!result) {
     return false;
@@ -105,7 +105,7 @@ bool Baseline::Compare(const Bitmap& bitmap, const std::string& pngPath) {
   auto info = MakeInfo(bitmap.width(), bitmap.height());
   auto pixels = new uint8_t[info.byteSize()];
   auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
-  auto result = bitmap.readPixels(info, pixels);
+  auto result = bitmap.readPixels(info.makeAlphaType(AlphaType::Premultiplied), pixels);
   if (!result) {
     return false;
   }
@@ -123,7 +123,7 @@ bool Baseline::Compare(const PixelMap& pixelMap, const std::string& pngPath) {
   auto info = MakeInfo(pixelMap.width(), pixelMap.height());
   auto pixels = new uint8_t[info.byteSize()];
   auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
-  auto result = pixelMap.readPixels(info, pixels);
+  auto result = pixelMap.readPixels(info.makeAlphaType(AlphaType::Premultiplied), pixels);
   if (!result) {
     return false;
   }
@@ -141,7 +141,10 @@ bool Baseline::Compare(std::shared_ptr<PAGSurface> surface, const std::string& p
   auto info = MakeInfo(surface->width(), surface->height());
   auto pixels = new uint8_t[info.byteSize()];
   auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
-  auto result = surface->readPixels(info.colorType(), info.alphaType(), pixels, info.rowBytes());
+  // 统一使用 premultiply 的数据当做 unpremultiplied 的进行编解码和对比，这样可以避免 pre->unpre
+  // 的转换扩大了像素误差。
+  auto result =
+      surface->readPixels(info.colorType(), AlphaType::Premultiplied, pixels, info.rowBytes());
   if (!result) {
     return false;
   }

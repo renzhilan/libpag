@@ -39,12 +39,12 @@ PAG_TEST_F(PAGTimeUtilsTest, ConvertProgressAndFrame) {
     pagFile->setProgress(progress);
     TestPAGPlayer->flush();
     EXPECT_TRUE(Baseline::Compare(
-        TestPAGSurface, "PAGTimeUtilsTest/ConvertProgressAndFrame_" + std::to_string(i) + ".png"));
+        TestPAGSurface, "PAGTimeUtilsTest/ConvertProgressAndFrame_" + std::to_string(i) + ".webp"));
     progress = pagFile->getProgress();
     pagFile->setProgress(progress);
     TestPAGPlayer->flush();
     EXPECT_TRUE(Baseline::Compare(
-        TestPAGSurface, "PAGTimeUtilsTest/ConvertProgressAndFrame_" + std::to_string(i) + ".png"));
+        TestPAGSurface, "PAGTimeUtilsTest/ConvertProgressAndFrame_" + std::to_string(i) + ".webp"));
   }
 }
 

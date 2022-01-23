@@ -32,7 +32,7 @@ using nlohmann::json;
 #define CHECK_PIXELS(info, pixels, key)                                      \
   {                                                                          \
     PixelMap pm(info, pixels);                                               \
-    Baseline::Compare(pm, "PAGReadPixelsTest/" + std::string(key) + ".png"); \
+    Baseline::Compare(pm, "PAGReadPixelsTest/" + std::string(key) + ".webp"); \
   }
 
 /**

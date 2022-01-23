@@ -44,7 +44,7 @@ PAG_TEST(PAGRasterizerTest, TestRasterizer) {
   mask->setMatrix(matrix);
   mask->fillPath(path);
   auto pixelBuffer = std::static_pointer_cast<FTMask>(mask)->getBuffer();
-  EXPECT_TRUE(Baseline::Compare(pixelBuffer, "PAGRasterizerTest/rasterizer_path.png"));
+  EXPECT_TRUE(Baseline::Compare(pixelBuffer, "PAGRasterizerTest/rasterizer_path.webp"));
 
   auto device = NativeGLDevice::Make();
   ASSERT_TRUE(device != nullptr);
@@ -65,7 +65,7 @@ PAG_TEST(PAGRasterizerTest, TestRasterizer) {
   bitmap.unlockPixels();
   ASSERT_TRUE(result);
   device->unlock();
-  EXPECT_TRUE(Baseline::Compare(bitmap, "PAGRasterizerTest/rasterizer_path_texture.png"));
+  EXPECT_TRUE(Baseline::Compare(bitmap, "PAGRasterizerTest/rasterizer_path_texture.webp"));
 
   auto typeface = Typeface::MakeFromPath("../resources/font/NotoColorEmoji.ttf");
   ASSERT_TRUE(typeface != nullptr);
@@ -82,6 +82,6 @@ PAG_TEST(PAGRasterizerTest, TestRasterizer) {
   EXPECT_TRUE(fabsf(matrix.getScaleX() - 2.75229359f) < FLT_EPSILON);
   EXPECT_TRUE(fabsf(matrix.getSkewX() + 0.550458729f) < FLT_EPSILON);
   EXPECT_TRUE(Baseline::Compare(std::static_pointer_cast<PixelBuffer>(buffer),
-                                "PAGRasterizerTest/rasterizer_emoji.png"));
+                                "PAGRasterizerTest/rasterizer_emoji.webp"));
 }
 }  // namespace pag

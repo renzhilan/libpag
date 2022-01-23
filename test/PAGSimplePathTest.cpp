@@ -37,6 +37,6 @@ PAG_TEST_F(PAGSimplePathTest, TestRect) {
   pagPlayer->setMatrix(Matrix::I());
   pagPlayer->setProgress(0);
   pagPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSimplePathTest/TestRect.png"));
+  EXPECT_TRUE(Baseline::Compare(pagSurface, "PAGSimplePathTest/TestRect.webp"));
 }
 }  // namespace pag

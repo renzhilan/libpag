@@ -72,7 +72,7 @@ PAG_TEST_F(PAGImageTest, image) {
   TestPAGFile->setCurrentTime(3000000);
   imageLayer->replaceImage(image);
   TestPAGPlayer->flush();
-  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageTest/image.png"));
+  EXPECT_TRUE(Baseline::Compare(TestPAGSurface, "PAGImageTest/image.webp"));
 }
 
 /**
@@ -98,7 +98,7 @@ PAG_TEST_F(PAGImageTest, image2) {
   result = image->readPixels(bitmap.info(), pixelBuffer->lockPixels());
   pixelBuffer->unlockPixels();
   ASSERT_TRUE(result);
-  EXPECT_TRUE(Baseline::Compare(pixelBuffer, "PAGImageTest/image2.png"));
+  EXPECT_TRUE(Baseline::Compare(pixelBuffer, "PAGImageTest/image2.webp"));
 }
 
 /**
@@ -119,6 +119,6 @@ PAG_TEST_F(PAGImageTest, image3) {
   player->setSurface(surface);
   auto result = player->flush();
   EXPECT_TRUE(result);
-  EXPECT_TRUE(Baseline::Compare(surface, "PAGImageTest/image3.png"));
+  EXPECT_TRUE(Baseline::Compare(surface, "PAGImageTest/image3.webp"));
 }
 }  // namespace pag
