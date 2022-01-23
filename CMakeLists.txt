@@ -461,7 +461,7 @@ if (PAG_BUILD_TESTS)
 
     add_executable(PAGUnitTest ${Test_VENDOR_TARGET} ${PAG_TEST_FILES})
     target_include_directories(PAGUnitTest PUBLIC ${TEST_INCLUDES})
-    # skip all File MD5 check in PAGUnitTest
+    # skip the PAGCompareFrameTest test case in PAGUnitTest
     target_compile_definitions(PAGUnitTest PUBLIC SKIP_FRAME_COMPARE)
     target_link_libraries(PAGUnitTest ${TEST_PLATFORM_LIBS})
     set_target_properties(PAGUnitTest PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -fno-access-control")

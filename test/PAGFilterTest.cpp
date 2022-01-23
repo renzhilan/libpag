@@ -81,12 +81,6 @@ PAG_TEST(PAGFilterTest, MotionTile) {
  * 用例描述: MotionBlur效果测试
  */
 PAG_TEST(PAGFilterTest, MotionBlur) {
-  json compareJson;
-  std::ifstream inputFile("../test/res/compare_filter_md5.json");
-  if (inputFile) {
-    inputFile >> compareJson;
-    inputFile.close();
-  }
   auto pagFile = PAGFile::Load("../resources/filter/MotionBlur.pag");
   ASSERT_NE(pagFile, nullptr);
   auto pagSurface = PAGSurface::MakeOffscreen(pagFile->width(), pagFile->height());

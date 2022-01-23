@@ -64,7 +64,6 @@ void TimeStretchTest(std::string path, std::string methodName, float scaleFactor
 
   Frame totalFrames = TimeToFrame(TestPAGFile->duration(), TestPAGFile->frameRate());
 
-  std::vector<std::string> md5Vector;
   std::string errorMsg = "";
 
   auto pagImage = PAGImage::FromPath("../resources/apitest/test_timestretch.png");

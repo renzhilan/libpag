@@ -42,9 +42,7 @@ PAG_TEST(PAGFontTest, TestFont) {
   Frame totalFrames = TimeToFrame(TestPAGFile->duration(), TestPAGFile->frameRate());
   Frame currentFrame = 0;
 
-  std::vector<std::string> md5Vector;
   std::string errorMsg;
-
   while (currentFrame < totalFrames) {
     //添加0.1帧目的是保证progress不会由于精度问题帧数计算错误，frame应该使用totalFrames作为总体帧数。因为对于file来说总时长为[0,totalFrames],对应于[0,1]，因此归一化时，分母应该为totalFrames
     pagPlayer->setProgress((currentFrame + 0.1) * 1.0 / totalFrames);

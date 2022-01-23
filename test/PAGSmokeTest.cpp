@@ -29,7 +29,7 @@ namespace pag {
 /**
  * 用例描述: smoke文件夹下文件是否渲染正常
  */
-PAG_TEST(PAGSmokeTest, TestMD5) {
+PAG_TEST(PAGSmokeTest, RenderFrames) {
   std::vector<std::string> files;
   GetAllPAGFiles("../resources/smoke", files);
 

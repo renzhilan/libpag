@@ -24,25 +24,21 @@
 #include "gpu/opengl/GLUtil.h"
 #include "image/Image.h"
 #include "image/PixelMap.h"
-#include "nlohmann/json.hpp"
 #include "platform/NativeGLDevice.h"
 
 namespace pag {
 using nlohmann::json;
 
-#define CHECK_PIXELS(info, pixels, key)                                               \
-  {                                                                                   \
-    PixelMap pm(info, pixels);                                                        \
-    auto md5 = DumpMD5(pm);                                                           \
-    outputJson[key] = md5;                                                            \
-    TraceIf(pm, "../test/out/" + std::string(key) + ".png", compareJson[key] != md5); \
-    EXPECT_EQ(compareJson[key].get<std::string>(), md5);                              \
+#define CHECK_PIXELS(info, pixels, key)                                      \
+  {                                                                          \
+    PixelMap pm(info, pixels);                                               \
+    Baseline::Compare(pm, "PAGReadPixelsTest/" + std::string(key) + ".png"); \
   }
 
 /**
  * 用例描述: 像素格式转换相关功能测试-PixelMap
  */
-PAG_TEST(ReadPixelsTest, TestPixelMap) {
+PAG_TEST(PAGReadPixelsTest, TestPixelMap) {
   auto image = Image::MakeFrom("../resources/apitest/test_timestretch.png");
   EXPECT_TRUE(image != nullptr);
   auto width = image->width();
@@ -53,9 +49,6 @@ PAG_TEST(ReadPixelsTest, TestPixelMap) {
   auto pixelsB = new uint8_t[byteSize];
   auto result = image->readPixels(RGBAInfo, pixelsA);
   EXPECT_TRUE(result);
-
-  json compareJson = PAGTestEnvironment::CompareJson["PixelMapTest"];
-  json outputJson = {};
 
   PixelMap RGBAMap(RGBAInfo, pixelsA);
   CHECK_PIXELS(RGBAInfo, pixelsA, "PixelMap_RGBA_Original");
@@ -145,13 +138,12 @@ PAG_TEST(ReadPixelsTest, TestPixelMap) {
   delete[] pixelsA;
   delete[] pixelsB;
   delete[] pixelsC;
-  PAGTestEnvironment::DumpJson["PixelMapTest"] = outputJson;
 }
 
 /**
  * 用例描述: 像素格式转换相关功能测试-SurfaceReadPixels
  */
-PAG_TEST(ReadPixelsTest, TestSurfaceReadPixels) {
+PAG_TEST(PAGReadPixelsTest, TestSurfaceReadPixels) {
   auto image = Image::MakeFrom("../resources/apitest/test_timestretch.png");
   ASSERT_TRUE(image != nullptr);
   Bitmap bitmap = {};
@@ -176,8 +168,6 @@ PAG_TEST(ReadPixelsTest, TestSurfaceReadPixels) {
   auto width = bitmap.width();
   auto height = bitmap.height();
   pixels = lock.pixels();
-  json outputJson = {};
-  json compareJson = PAGTestEnvironment::CompareJson["SurfaceReadPixelsTest"];
 
   auto RGBAInfo = ImageInfo::Make(width, height, ColorType::RGBA_8888, AlphaType::Premultiplied);
   result = surface->readPixels(RGBAInfo, pixels);
@@ -257,13 +247,36 @@ PAG_TEST(ReadPixelsTest, TestSurfaceReadPixels) {
 
   gl->deleteTextures(1, &textureInfo.id);
   device->unlock();
-  PAGTestEnvironment::DumpJson["SurfaceReadPixelsTest"] = outputJson;
 }
 
 /**
- * 用例描述: Webp解码测试
+ * 用例描述: PNG 解码器测试
  */
-PAG_TEST(ReadPixelsTest, WebpCodec) {
+PAG_TEST(PAGReadPixelsTest, PngCodec) {
+  auto image = Image::MakeFrom("../resources/apitest/test_timestretch.png");
+  ASSERT_TRUE(image != nullptr);
+  ASSERT_EQ(image->width(), 1280);
+  ASSERT_EQ(image->height(), 720);
+  ASSERT_EQ(static_cast<int>(image->orientation()), static_cast<int>(Orientation::TopLeft));
+  auto rowBytes = image->width() * 4;
+  auto pixels = new (std::nothrow) uint8_t[rowBytes * image->height()];
+  ASSERT_TRUE(pixels);
+  auto info = ImageInfo::Make(1280, 720, ColorType::RGBA_8888, AlphaType::Premultiplied);
+  ASSERT_TRUE(image->readPixels(info, pixels));
+  PixelMap pixelMap(info, pixels);
+  auto bytes = Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::PNG, 100);
+  image = Image::MakeFrom(bytes);
+  ASSERT_TRUE(image != nullptr);
+  ASSERT_EQ(image->width(), 1280);
+  ASSERT_EQ(image->height(), 720);
+  ASSERT_EQ(static_cast<int>(image->orientation()), static_cast<int>(Orientation::TopLeft));
+  delete[] pixels;
+}
+
+/**
+ * 用例描述: Webp 解码器测试
+ */
+PAG_TEST(PAGReadPixelsTest, WebpCodec) {
   auto image = Image::MakeFrom("../resources/apitest/imageReplacement.webp");
   ASSERT_TRUE(image != nullptr);
   ASSERT_EQ(image->width(), 110);
@@ -276,16 +289,19 @@ PAG_TEST(ReadPixelsTest, WebpCodec) {
   bool res = image->readPixels(info, pixels);
   ASSERT_TRUE(res);
   PixelMap pixelMap(info, pixels);
-  Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::PNG, 100);
-  Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::WEBP, 100);
-  Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::JPEG, 100);
+  auto bytes = Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::WEBP, 100);
+  image = Image::MakeFrom(bytes);
+  ASSERT_TRUE(image != nullptr);
+  ASSERT_EQ(image->width(), 110);
+  ASSERT_EQ(image->height(), 110);
+  ASSERT_EQ(static_cast<int>(image->orientation()), static_cast<int>(Orientation::TopLeft));
   delete[] pixels;
 }
 
 /**
- * 用例描述: Jpeg解码测试
+ * 用例描述: JPEG 解码器测试
  */
-PAG_TEST(ReadPixelsTest, JpegCodec) {
+PAG_TEST(PAGReadPixelsTest, JpegCodec) {
   auto image = Image::MakeFrom("../resources/apitest/rotation.jpg");
   ASSERT_TRUE(image != nullptr);
   ASSERT_EQ(image->width(), 4032);
@@ -299,12 +315,12 @@ PAG_TEST(ReadPixelsTest, JpegCodec) {
   bool res = image->readPixels(info, pixels);
   PixelMap pixelMap(info, pixels);
 
-  auto bytes = Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::WEBP, 20);
-  if (bytes) {
-    std::ofstream out("../test/out/tet.webp");
-    out.write(reinterpret_cast<const char*>(bytes->data()), bytes->size());
-    out.close();
-  }
+  auto bytes = Image::Encode(pixelMap.info(), pixelMap.pixels(), EncodedFormat::JPEG, 20);
+  image = Image::MakeFrom(bytes);
+  ASSERT_TRUE(image != nullptr);
+  ASSERT_EQ(image->width(), 4032);
+  ASSERT_EQ(image->height(), 3024);
+  ASSERT_EQ(static_cast<int>(image->orientation()), static_cast<int>(Orientation::TopLeft));
   delete[] pixels;
   ASSERT_TRUE(res);
 }

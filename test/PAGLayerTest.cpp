@@ -139,7 +139,7 @@ PAG_TEST_F(PAGLayerTest, markers) {
 }
 
 /**
- * 用例描述: PAGLayerTest测试trackMatte接口，对比获取到的MD5
+ * 用例描述: 测试trackMatte的渲染结果。
  */
 PAG_TEST_F(PAGLayerTest, trackMatte) {
   // from 0.52s-10s
@@ -221,52 +221,6 @@ PAG_TEST_F(PAGLayerFrameTest, goToFrame) {
   //从区间内切换到区间外会有一次成功
   ASSERT_TRUE(TestPAGFile->gotoTime(FrameToTime(600, TestPAGFile->frameRateInternal())));
   ASSERT_FALSE(TestPAGFile->gotoTime(FrameToTime(601, TestPAGFile->frameRateInternal())));
-}
-
-/**
- * 用例描述: PAGLayer外部滤镜接口测试
- */
-// TODO(liamcli) 这里带后续外部滤镜注入接口优化完，需要修改本用例
-PAG_TEST_F(PAGLayerTest, external_filter_ID79286937) {
-  //  auto target = 1;
-  //  std::shared_ptr<PAGImageLayer> imageLayer1 = std::static_pointer_cast<PAGImageLayer>(
-  //      GetLayer(TestPAGFile, LayerType::Image, target));
-  //  Marker marker;
-  //  marker.comment = "{\"filter\":[\"ShaderToy_BoDian\"]}";
-  //
-  //  auto filters = smart::SmartFilter::getShaderToyFilterParams({&marker},
-  //  imageLayer1->duration(),
-  //                                                              imageLayer1->frameRate());
-  //  auto pagFilter = PAGFilter::FromExternal(filters.front(), 500000);
-  //  imageLayer1->addFilter(pagFilter);
-  //
-  //  int targetIndex = 0;
-  //  auto solidLayer = std::static_pointer_cast<PAGSolidLayer>(
-  //      GetLayer(TestPAGFile, LayerType::Solid, targetIndex));
-  //  solidLayer->setSolidColor(Black);
-  //
-  //  TestPAGFile->setCurrentTime(2200000);
-  //  TestPAGPlayer->flush();
-  //  auto md54 = DumpMD5(TestPAGSurface);
-  ////        Trace(MakeSnapshot(TestPAGSurface), "../test/out/md54.png");
-  //
-  //  TestPAGFile->setCurrentTime(2600000);
-  //  TestPAGPlayer->flush();
-  //  auto md55 = DumpMD5(TestPAGSurface);
-  ////        Trace(MakeSnapshot(TestPAGSurface), "../test/out/md55.png");
-  //
-  //  PAGTestEnvironment::DumpJson["PAGLayerFilterTest"]["filter"]["md54"] = md54;
-  //  PAGTestEnvironment::DumpJson["PAGLayerFilterTest"]["filter"]["md55"] = md55;
-  //#ifdef COMPARE_JSON_PATH
-  //  auto cmd54 = PAGTestEnvironment::CompareJson["PAGLayerFilterTest"]["filter"]["md54"];
-  //  if (cmd54 != nullptr) {
-  //    EXPECT_EQ(cmd54.get<std::string>(), md54);
-  //  }
-  //  auto cmd55 = PAGTestEnvironment::CompareJson["PAGLayerFilterTest"]["filter"]["md55"];
-  //  if (cmd55 != nullptr) {
-  //    EXPECT_EQ(cmd55.get<std::string>(), md55);
-  //  }
-  //#endif
 }
 
 /**

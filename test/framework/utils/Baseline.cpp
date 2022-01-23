@@ -98,6 +98,42 @@ bool Baseline::Compare(std::shared_ptr<PixelBuffer> pixelBuffer, const std::stri
   return result;
 }
 
+bool Baseline::Compare(const Bitmap& bitmap, const std::string& pngPath) {
+  if (bitmap.isEmpty()) {
+    return false;
+  }
+  auto info = MakeInfo(bitmap.width(), bitmap.height());
+  auto pixels = new uint8_t[info.byteSize()];
+  auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
+  auto result = bitmap.readPixels(info, pixels);
+  if (!result) {
+    return false;
+  }
+  result = ComparePixelData(data, pngPath);
+  if (!result) {
+    SaveImage(info, data->data(), OUT_ROOT + pngPath);
+  }
+  return result;
+}
+
+bool Baseline::Compare(const PixelMap& pixelMap, const std::string& pngPath) {
+  if (pixelMap.isEmpty()) {
+    return false;
+  }
+  auto info = MakeInfo(pixelMap.width(), pixelMap.height());
+  auto pixels = new uint8_t[info.byteSize()];
+  auto data = Data::MakeAdopted(pixels, info.byteSize(), Data::DeleteProc);
+  auto result = pixelMap.readPixels(info, pixels);
+  if (!result) {
+    return false;
+  }
+  result = ComparePixelData(data, pngPath);
+  if (!result) {
+    SaveImage(info, data->data(), OUT_ROOT + pngPath);
+  }
+  return result;
+}
+
 bool Baseline::Compare(std::shared_ptr<PAGSurface> surface, const std::string& pngPath) {
   if (surface == nullptr) {
     return false;
