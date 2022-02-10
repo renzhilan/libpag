@@ -1,4 +1,4 @@
-import { PAG } from './types';
+import { PAG, Marker } from './types';
 import { PAGLayer } from './pag-layer';
 
 export class PAGComposition extends PAGLayer {
@@ -40,6 +40,12 @@ export class PAGComposition extends PAGLayer {
     return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._getLayerAt, this.wasmIns, index)) as number;
   }
   /**
+   * Returns an array of layers that match the specified layer name.
+   */
+  public async getLayersByName(layerName: string): Promise<PAGLayer> {
+    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._getLayersByName, this.wasmIns, layerName)) as PAGLayer;
+  }
+  /**
    * Returns the index position of a child layer.
    * @param pagLayer The layer instance to identify.
    * @returns The index position of the child layer to identify.
@@ -66,24 +72,6 @@ export class PAGComposition extends PAGLayer {
     return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._contains, this.wasmIns, pagLayer)) as boolean;
   }
   /**
-   * Remove the specified PAGLayer from current PAGComposition.
-   */
-  public async removeLayerAt(index: number): Promise<number> {
-    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._removeLayerAt, this.wasmIns, index)) as number;
-  }
-  /**
-   * Remove all PAGLayers from current PAGComposition.
-   */
-  public async removeAllLayers(): Promise<void> {
-    await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._removeAllLayers, this.wasmIns);
-  }
-  /**
-   * Indicates when the first frame of the audio plays in the composition's timeline.
-   */
-  public async audioStartTime(): Promise<number> {
-    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._audioStartTime, this.wasmIns)) as number;
-  }
-  /**
    * Add a PAGLayer to current PAGComposition at the top. If you add a layer that already has a
    * different PAGComposition object as a parent, the layer is removed from the other PAGComposition
    * object.
@@ -98,5 +86,29 @@ export class PAGComposition extends PAGLayer {
    */
   public async addLayerAt(layer: PAGLayer, index: number): Promise<boolean> {
     return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._addLayerAt, this.wasmIns, layer, index)) as boolean;
+  }
+  /**
+  * Indicates when the first frame of the audio plays in the composition's timeline.
+  */
+  public async audioStartTime(): Promise<number> {
+    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._audioStartTime, this.wasmIns)) as number;
+  }
+  /**
+   * Returns the audio markers of this composition.
+   */
+  public async audioMarkers(): Promise<Array<Marker>> {
+    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._audioMarkers, this.wasmIns)) as Array<Marker>;
+  }
+  /**
+   * Remove the specified PAGLayer from current PAGComposition.
+   */
+  public async removeLayerAt(index: number): Promise<number> {
+    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._removeLayerAt, this.wasmIns, index)) as number;
+  }
+  /**
+   * Remove all PAGLayers from current PAGComposition.
+   */
+  public async removeAllLayers(): Promise<void> {
+    await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._removeAllLayers, this.wasmIns);
   }
 }

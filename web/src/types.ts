@@ -112,6 +112,15 @@ export interface Point {
   y: number;
 }
 
+/**
+ * Marker stores comments and other metadata and mark important times in a composition or layer.
+ */
+ export interface Marker {
+  startTime: number;
+  duration : number;
+  comment: string;
+};
+
 export declare class TextDocument {
   /**
    * When true, the text layer shows a fill.
@@ -213,6 +222,7 @@ export enum LayerType {
   Image,
   PreCompose,
 }
+
 
 /**
  * Defines the rules on how to stretch the timeline of content to fit the specified duration.

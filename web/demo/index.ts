@@ -44,6 +44,7 @@ PAGInit({
 
   // 加载PAG
   document.getElementById('btn-upload-pag').addEventListener('click', () => {
+
     document.getElementById('upload-pag').click();
   });
   document.getElementById('upload-pag').addEventListener('change', (event) => {
@@ -218,117 +219,98 @@ PAGInit({
   });
 
   // PAGComposition
-  // width
-  document.getElementById('btn-getWidth').addEventListener('click', async () => {
-     Log.log(`width: ${await pagComposition.width()}`)
-  });
-    // height
-  document.getElementById('btn-getHeight').addEventListener('click', async () => {
-      Log.log(`height: ${await pagComposition.height()}`)
-    });
-  // setContentSize
-  document.getElementById('btn-setContentSize').addEventListener('click', async () => {
-    Log.log(`width: ${await pagComposition.width()}, height: ${await pagComposition.height()}`)
-    Log.log(`change Rect`);
-    pagComposition.setContentSize(360, 640);
-    Log.log(`width: ${await pagComposition.width()}, height: ${await pagComposition.height()}`)
-  });
-  // btn-numChildren
-  document.getElementById('btn-numChildren').addEventListener('click', async () => {
-    Log.log(`numChildren: ${await pagComposition.numChildren()}`)
-  });
-  // btn-getLayerAt
-  document.getElementById('btn-getLayerAt').addEventListener('click', async () => {
-    const pagLayerWasm = await pagComposition.getLayerAt(0);
-    if(!existsLayer(pagLayerWasm)) return;
-    const pagLayer = new PAG.PAGLayer(pagLayerWasm);
-    Log.log(`getLayerAt index 0, layerName: ${await pagLayer.layerName()}`)
-  });
-  // btn-getLayerIndex
-  document.getElementById('btn-getLayerIndex').addEventListener('click', async () => {
-    const pagLayerWasm = await pagComposition.getLayerAt(0);
-    if(!existsLayer(pagLayerWasm)) return;
-    const index = await pagComposition.getLayerIndex(pagLayerWasm);
-    Log.log(`GetLayerIndex: ${index}`);
-  });
-  // btn-getLayerIndex
-  document.getElementById('btn-swapLayerAt').addEventListener('click', async () => {
-    swapLayer('swapLayerAt');
-  });
-  // btn-getLayerIndex
-  document.getElementById('btn-swapLayer').addEventListener('click', async () => {
-    swapLayer('swapLayer');
-  });
-  // audioStartTime
-  document.getElementById('btn-audioStartTime').addEventListener('click', async () => {
-    const audioStartTime = await pagComposition.audioStartTime();
-    Log.log('audioStartTime:', audioStartTime);
-  });
-  // contains
-  document.getElementById('btn-contains').addEventListener('click', async () => {
-      const pagLayerWasm = await pagComposition.getLayerAt(0);
-      if(!existsLayer(pagLayerWasm)) return;
-      const isContains = await pagComposition.contains(pagLayerWasm);
-      if(isContains){
-        Log.log('is contains');
-      }
-      await pagComposition.removeLayerAt(0);
-      const isNotContains = await pagComposition.contains(pagLayerWasm);
-      if(!isNotContains){
-        Log.log('is not Contains');
-      }
-    });
-  // removeLayerAt
-  document.getElementById('btn-removeLayerAt').addEventListener('click', async () => {
-    Log.log(`Layers num: ${await pagComposition.numChildren()}`)
-    Log.log('start removeLayerAt index 0');
-    await pagComposition.removeLayerAt(0);
-    Log.log('delete Layer[0] success: Layers num: ', await pagComposition.numChildren());
-  });
-  // removeAllLayers
-  document.getElementById('btn-removeAllLayers').addEventListener('click', async () => {
-    Log.log(`Layers num: ${await pagComposition.numChildren()}`)
-    Log.log('start removeAllLayers index 0');
-    await pagComposition.removeAllLayers();
-    Log.log('removeAllLayers success: Layers num: ', await pagComposition.numChildren());
-  });
-
-  // addLayer
-  document.getElementById('btn-addLayer').addEventListener('click', async () => {
-    const pagLayerWasm = await pagComposition.getLayerAt(0);
-    if(!existsLayer(pagLayerWasm)) return;
-    await pagComposition.removeLayerAt(0);
-    Log.log(`Layers num: ${await pagComposition.numChildren()}`);
-    const isSuccess: boolean = await pagComposition.addLayer(pagLayerWasm);
-    if(isSuccess){
-      Log.log(`addLayer success  num: ${await pagComposition.numChildren()}`);
-      return;
-    }
-    Log.log(`addLayer fail`);
-  });
-  
-  // addLayerAt
-  document.getElementById('btn-addLayerAt').addEventListener('click', async () => {
-    const pagLayerWasm = await pagComposition.getLayerAt(0);
-    if(!existsLayer(pagLayerWasm)) return;
-    await pagComposition.removeLayerAt(0);
-    const pagLayer_1 = new PAG.PAGLayer(pagLayerWasm);
-    Log.log(`numChildren : ${await pagComposition.numChildren()},  template layerName: ${await pagLayer_1.layerName()}`);
-    const isSuccess: boolean =  await pagComposition.addLayerAt(pagLayerWasm, 0);
-    if(isSuccess){
-      const pagLayerWasm_1 = await pagComposition.getLayerAt(0);
-      const pagLayer = new PAG.PAGLayer(pagLayerWasm_1);
-      Log.log(`addLayer success numChildren: ${await pagComposition.numChildren()}, add layerName: ${await pagLayer.layerName()}`);
-      return ;
-    }
-    Log.log(`addLayer fail`);
+  document.getElementById('btn-composition').addEventListener('click', async () => {
+    testPAGCompositionAPi();
   });
 });
 
-const existsLayer = (pagLayerWasm: object) =>{
-  if(pagLayerWasm) return true;
+const existsLayer = (pagLayerWasm: object) => {
+  if (pagLayerWasm) return true;
   Log.log('no Layer');
   return false;
+}
+
+// PAGComposition api 测试
+const testPAGComposition = {
+  rect: async () => {
+    Log.log(`test result: width: ${await pagComposition.width()}, height: ${await pagComposition.height()}`)
+  },
+  setContentSize: async () => {
+    await pagComposition.setContentSize(360, 640);
+    Log.log(`test setContentSize result: width: ${await pagComposition.width()}, height: ${await pagComposition.height()}`)
+  },
+  numChildren: async () => {
+    Log.log(`test numChildren: ${await pagComposition.numChildren()}`)
+  },
+  getLayerAt: async () => {
+    const pagLayerWasm = await pagComposition.getLayerAt(0);
+    if (!existsLayer(pagLayerWasm)) return;
+    const pagLayer = new PAG.PAGLayer(pagLayerWasm);
+    Log.log(`test getLayerAt index 0, layerName: ${await pagLayer.layerName()}`)
+  },
+  getLayersByName: async () => {
+    const pagLayerWasm = await pagComposition.getLayerAt(0);
+    if(!existsLayer(pagLayerWasm)) return;
+    const pagLayer = new PAG.PAGLayer(pagLayerWasm);
+    const layerName = await pagLayer.layerName();
+    const vectorPagLayer = await pagComposition.getLayersByName(layerName);
+    for (let j = 0; j < vectorPagLayer.size(); j++) {
+      const pagLayerWasm = vectorPagLayer.get(j);
+      const pagLayer_1 = new PAG.PAGLayer(pagLayerWasm);
+      Log.log(`test getLayersByName: layerName: ${await pagLayer_1.layerName()}`);
+    }
+  },
+  audioStartTime: async () => {
+    const audioStartTime = await pagComposition.audioStartTime();
+    Log.log('test audioStartTime:', audioStartTime);
+  },
+  audioMarkers: async () => {
+    const audioMarkers = await pagComposition.audioMarkers();
+    Log.log(`test audioMarkers: size`, audioMarkers.size());
+  },
+  getLayerIndex: async () => {
+    const pagLayerWasm = await pagComposition.getLayerAt(0);
+    const index = await pagComposition.getLayerIndex(pagLayerWasm);
+    Log.log(`test GetLayerIndex: ${index}`);
+  },
+  swapLayerAt: async () => {
+    await swapLayer('swapLayerAt');
+  },
+  swapLayer: async () => {
+    await swapLayer('swapLayer');
+  },
+  contains: async () => {
+    const pagLayerWasm = await pagComposition.getLayerAt(0);
+    const isContains = await pagComposition.contains(pagLayerWasm);
+    if (isContains) { Log.log('test contains'); }
+  },
+  addLayer: async () => {
+    const pagLayerWasm = await pagComposition.getLayerAt(0);
+    await pagComposition.removeLayerAt(0);
+    const oldNum = await pagComposition.numChildren();
+    const isSuccess: boolean = await pagComposition.addLayer(pagLayerWasm);
+    if (isSuccess) { Log.log(`test addLayer success: old num ${oldNum} current num ${await pagComposition.numChildren()}`)};
+  },
+  removeLayerAt: async () => {
+    const oldNum = await pagComposition.numChildren();
+    await pagComposition.removeLayerAt(0);
+    Log.log(`test delete Layer[0] success: old LayersNum: ${oldNum} current LayersNum ${await pagComposition.numChildren()}`);
+  },
+  removeAllLayers: async () => {
+    const oldNum = await pagComposition.numChildren();
+    await pagComposition.removeAllLayers();
+    Log.log(`test removeAllLayers success: old LayersNum${oldNum} current LayersNum ${await pagComposition.numChildren()}`);
+  }
+}
+const testPAGCompositionAPi = async () => {
+  pagComposition = await pagView.getComposition();
+  Log.log(`-------------------TEST PAGCompositionAPI START--------------------- `);
+  for (let i in testPAGComposition){
+    if (testPAGComposition.hasOwnProperty(i)) {
+      await testPAGComposition[i]();
+    }
+  }
+  Log.log(`-------------------TEST PAGCompositionAPI END--------------------- `);
 }
 
 const swapLayer = async (type: string) => {
@@ -338,10 +320,8 @@ const swapLayer = async (type: string) => {
     Log.log('No layer switching');
     return;
   };
-  const pagLayer_0 = new PAG.PAGLayer(pagLayerWasm_0);
-  const pagLayer_1 = new PAG.PAGLayer(pagLayerWasm_1);
-  Log.log(`layerName0 : ${await pagLayer_0.layerName()}, layerName1 : ${await pagLayer_1.layerName()}`);
-  Log.log(`start ${type}...`);
+  const pagLayer_name_0 = await new PAG.PAGLayer(pagLayerWasm_0).layerName();
+  const pagLayer_name_1 = await new PAG.PAGLayer(pagLayerWasm_1).layerName();
   if (type === 'swapLayer') {
     await pagComposition.swapLayer(pagLayerWasm_0, pagLayerWasm_1);
   } else {
@@ -349,9 +329,9 @@ const swapLayer = async (type: string) => {
   }
   const pagLayerWasm_exch_0 = await pagComposition.getLayerAt(0);
   const pagLayerWasm_exch_1 = await pagComposition.getLayerAt(1);
-  const pagLayer__exch_0 = new PAG.PAGLayer(pagLayerWasm_exch_0);
-  const pagLayer__exch_1 = new PAG.PAGLayer(pagLayerWasm_exch_1);
-  Log.log(`layerName0 : ${await pagLayer__exch_0.layerName()}, layerName1 : ${await pagLayer__exch_1.layerName()}`);
+  const pagLayer__exch_0 = await (new PAG.PAGLayer(pagLayerWasm_exch_0).layerName());
+  const pagLayer__exch_1 = await (new PAG.PAGLayer(pagLayerWasm_exch_1).layerName());
+  Log.log(`test ${type}:  oldLayerName_0=${pagLayer_name_0}, oldLayerName_1=${pagLayer_name_1} exchange LayerName_0=${pagLayer__exch_0}, LayerName_1=${pagLayer__exch_1} `);
 }
 
 const createPAGView = async (file) => {
@@ -379,7 +359,6 @@ const createPAGView = async (file) => {
   document.getElementById('control').style.display = '';
   // 图层编辑
   const editableLayers = await getEditableLayer(PAG, pagFile);
-  pagComposition = await pagView.getComposition();
   console.log(editableLayers);
   renderEditableLayer(editableLayers);
   console.log(`已加载 ${file.name}`);
@@ -438,7 +417,7 @@ const getEditableLayer = async (PAG: PAGNamespace, pagFile) => {
 
 const renderEditableLayer = (editableLayers) => {
   const box = document.createElement('div');
-  box.className = 'mt-24';
+  box.className = 'mt-24 editLayer-content';
   box.innerText = '图层编辑：';
   editableLayers.forEach((layer) => {
     const item = document.createElement('div');
@@ -460,7 +439,7 @@ const renderEditableLayer = (editableLayers) => {
     item.appendChild(replaceVideoBtn);
     box.appendChild(item);
   });
-  document.body.appendChild(box);
+  document.querySelector('#editLayer-content').appendChild(box)
 };
 
 // 替换图片

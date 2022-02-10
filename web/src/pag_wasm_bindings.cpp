@@ -31,6 +31,7 @@
 using namespace emscripten;
 using namespace pag;
 
+
 EMSCRIPTEN_BINDINGS(pag) {
   class_<PAGLayer>("_PAGLayer")
       .smart_ptr<std::shared_ptr<PAGLayer>>("_PAGLayer")
@@ -68,20 +69,28 @@ EMSCRIPTEN_BINDINGS(pag) {
       .function("_numChildren", &PAGComposition::numChildren)
       .function("_getLayerAt", &PAGComposition::getLayerAt)
       .function("_getLayerIndex", &PAGComposition::getLayerIndex)
+      .function("_getLayersByName", &PAGComposition::getLayersByName)
       .function("_swapLayerAt", &PAGComposition::swapLayerAt)
       .function("_swapLayer", &PAGComposition::swapLayer)
-      .function("_contains", optional_override([](PAGComposition& pagComposition, std::shared_ptr<PAGLayer> pagLayer) {
+      .function("_contains", optional_override([](PAGComposition& pagComposition,
+                                                  std::shared_ptr<PAGLayer> pagLayer) {
                   return static_cast<bool>(pagComposition.contains(pagLayer));
                 }))
       .function("_audioStartTime", optional_override([](PAGComposition& pagComposition) {
                   return static_cast<int>(pagComposition.audioStartTime());
                 }))
+      .function("_audioMarkers", optional_override([](PAGComposition& pagComposition) {
+                  std::vector<const Marker*> result = pagComposition.audioMarkers();
+                  return result;
+                }))
       .function("_removeLayerAt", &PAGComposition::removeLayerAt)
       .function("_removeAllLayers", &PAGComposition::removeAllLayers)
-      .function("_addLayer", optional_override([](PAGComposition& pagComposition, std::shared_ptr<PAGLayer> pagLayer) {
+      .function("_addLayer", optional_override([](PAGComposition& pagComposition,
+                                                  std::shared_ptr<PAGLayer> pagLayer) {
                   return static_cast<bool>(pagComposition.addLayer(pagLayer));
                 }))
-      .function("_addLayerAt", optional_override([](PAGComposition& pagComposition, std::shared_ptr<PAGLayer> pagLayer, int index) {
+      .function("_addLayerAt", optional_override([](PAGComposition& pagComposition,
+                                                    std::shared_ptr<PAGLayer> pagLayer, int index) {
                   return static_cast<bool>(pagComposition.addLayerAt(pagLayer, index));
                 }));
 
@@ -147,7 +156,7 @@ EMSCRIPTEN_BINDINGS(pag) {
                       }))
       .function("_width", &PAGImage::width)
       .function("_height", &PAGImage::height);
-    
+
   class_<PAGPlayer>("_PAGPlayer")
       .smart_ptr_constructor("_PAGPlayer", &std::make_shared<PAGPlayer>)
       .function("_setProgress", &PAGPlayer::setProgress)
@@ -221,6 +230,11 @@ EMSCRIPTEN_BINDINGS(pag) {
       .field("join", &Stroke::join)
       .field("miterLimit", &Stroke::miterLimit);
 
+  value_object<Marker>("Marker")
+      .field("startTime", &Marker::startTime)
+      .field("duration", &Marker::duration)
+      .field("comment", &Marker::comment);
+
   enum_<LayerType>("LayerType")
       .value("Unknown", LayerType::Unknown)
       .value("Null", LayerType::Null)
@@ -233,6 +247,7 @@ EMSCRIPTEN_BINDINGS(pag) {
   register_vector<std::shared_ptr<PAGLayer>>("VectorPAGLayer");
   register_vector<std::string>("VectorString");
   register_vector<Point>("VectorPoint");
+  register_vector<const Marker*>("VectorMarker");
   function("_SetFallbackFontNames", optional_override([](std::vector<std::string> fontNames) {
              PAGFont::SetFallbackFontNames(fontNames);
            }));

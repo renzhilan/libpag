@@ -13,6 +13,7 @@
       <div>
         <canvas class="canvas" id="pag" width="640" height="640"></canvas>
         <div class="tablecloth"></div>
+        <div id = "editLayer-content"></div>
       </div>
       <div class="ml-24">
         <div class="mt-24">
@@ -29,83 +30,94 @@
           <input id="upload-pag" type="file" style="display: none" accept=".pag" />
         </div>
         <section id="control" style="display: none">
-          <h2>PAGFile:</h2>
-          <div class="mt-24">
-            <button id="btn-pagfile-get-duration">Get duration</button>
-            PAGFile duration
-            <input id="input-pagfile-duration" type="number" value="0" />
-            <button id="btn-pagfile-set-duration">setDuration</button>
+          <div class="container-1">
+            <section class="ac-container">
+                <div>
+                    <input id="ac-1" name="accordion-1" type="checkbox" checked />
+                    <label for="ac-1">PAGView </label>
+                    <article class="ac-large">
+                      <div class="mt-24">
+                        设置次数
+                        <input id="repeatCount" type="number" value="0" />
+                        <button id="setRepeatCount">设置</button>
+                      </div>
+                      <div class="mt-24">
+                        <button id="btn-maxFrameRate">获取最大帧率</button>
+                        设置最大帧率
+                        <input id="maxFrameRate" type="number" value="0" />
+                        <button id="setMaxFrameRate">设置</button>
+                      </div>
+                      <div class="mt-24">
+                        <button class="mt-24" id="btn-scaleMode">获取缩放模式</button>
+                        缩放模式
+                        <select id="scaleMode">
+                          <option value="0">None</option>
+                          <option value="1">Stretch</option>
+                          <option value="2" selected>LetterBox</option>
+                          <option value="3">Zoom</option>
+                        </select>
+                        <button id="setScaleMode" class="mt-24">设置</button>
+                      </div>
+                      <button class="mt-24" id="btn-play">播放</button>
+                      <button class="mt-24" id="btn-pause">暂停</button>
+                      <button class="mt-24" id="btn-stop">停止</button>
+                      <button class="mt-24" id="btn-destroy">销毁</button>
+                      <div class="mt-24">
+                        <button id="btn-getProgress">获取进度</button>
+                        设置进度
+                        <input id="progress" type="number" value="0" />
+                        <button id="setProgress">跳转</button>
+                      </div>
+                      <button class="mt-24" id="btn-videoEnabled">VideoEnabled status</button>
+                      <button class="mt-24" id="btn-setVideoEnabled">Set videoEnabled</button>
+                      <button class="mt-24" id="btn-cacheEnabled">CacheEnabled status</button>
+                      <button class="mt-24" id="btn-setCacheEnabled">Set cacheEnabled</button>
+                      <button class="mt-24" id="btn-freeCache">FreeCache</button>
+                      <div class="mt-24">
+                        <button id="btn-cacheScale">CacheScale status</button>
+                        CacheScale
+                        <input id="cacheScale" type="number" value="1" />
+                        <button id="btn-setCacheScale">Set cacheScale</button>
+                      </div>
+                    </article>
+              
+                </div>
+                <div>
+                    <input id="ac-2" name="accordion-1" type="checkbox" />
+                    <label for="ac-2">PAGFile</label>
+                    <article class="ac-large">
+                      <div class="mt-24">
+                        <button id="btn-pagfile-get-duration">Get duration</button>
+                        PAGFile duration
+                        <input id="input-pagfile-duration" type="number" value="0" />
+                        <button id="btn-pagfile-set-duration">setDuration</button>
+                      </div>
+                      <div class="mt-24">
+                        <button id="btn-pagfile-time-stretch-mode">Get timeStretchMode</button>
+                        timeStretchMode
+                        <select id="select-time-stretch-mode">
+                          <option value="0">None</option>
+                          <option value="1">Scale</option>
+                          <option value="2" selected>Repeat</option>
+                          <option value="3">RepeatInverted</option>
+                        </select>
+                        <button id="btn-pagfile-set-time-stretch-mode">setTimeStretchMode</button>
+                      </div>
+                    </article>
+                </div>
+                <div>
+                    <input id="ac-3" name="accordion-1" type="checkbox" />
+                    <label for="ac-3">PAGComposition</label>
+                    <article class="ac-large">
+                      <div class="support-method">
+                         <div class="title"> support-method:  </div> 
+                          width, height, setContentSize, numChildren, getLayerAt, getLayerIndex, getLayersByName, swapLayerAt, contains, audioStartTime, audioMarkers, audioMarkers, removeLayerAt, removeAllLayers, addLayer, addLayerAt
+                      </div>
+                      <button class="mt-24" id="btn-composition">Test API</button>
+                    </article>
+                </div>
+            </section>
           </div>
-          <div class="mt-24">
-            <button id="btn-pagfile-time-stretch-mode">Get timeStretchMode</button>
-            timeStretchMode
-            <select id="select-time-stretch-mode">
-              <option value="0">None</option>
-              <option value="1">Scale</option>
-              <option value="2" selected>Repeat</option>
-              <option value="3">RepeatInverted</option>
-            </select>
-            <button id="btn-pagfile-set-time-stretch-mode">setTimeStretchMode</button>
-          </div>
-          <h2>PAGView:</h2>
-          <div class="mt-24">
-            设置次数
-            <input id="repeatCount" type="number" value="0" />
-            <button id="setRepeatCount">设置</button>
-          </div>
-          <div class="mt-24">
-            <button id="btn-maxFrameRate">获取最大帧率</button>
-            设置最大帧率
-            <input id="maxFrameRate" type="number" value="0" />
-            <button id="setMaxFrameRate">设置</button>
-          </div>
-          <div class="mt-24">
-            <button class="mt-24" id="btn-scaleMode">获取缩放模式</button>
-            缩放模式
-            <select id="scaleMode">
-              <option value="0">None</option>
-              <option value="1">Stretch</option>
-              <option value="2" selected>LetterBox</option>
-              <option value="3">Zoom</option>
-            </select>
-            <button id="setScaleMode" class="mt-24">设置</button>
-          </div>
-          <button class="mt-24" id="btn-play">播放</button>
-          <button class="mt-24" id="btn-pause">暂停</button>
-          <button class="mt-24" id="btn-stop">停止</button>
-          <button class="mt-24" id="btn-destroy">销毁</button>
-          <div class="mt-24">
-            <button id="btn-getProgress">获取进度</button>
-            设置进度
-            <input id="progress" type="number" value="0" />
-            <button id="setProgress">跳转</button>
-          </div>
-          <button class="mt-24" id="btn-videoEnabled">VideoEnabled status</button>
-          <button class="mt-24" id="btn-setVideoEnabled">Set videoEnabled</button>
-          <button class="mt-24" id="btn-cacheEnabled">CacheEnabled status</button>
-          <button class="mt-24" id="btn-setCacheEnabled">Set cacheEnabled</button>
-          <button class="mt-24" id="btn-freeCache">FreeCache</button>
-          <div class="mt-24">
-            <button id="btn-cacheScale">CacheScale status</button>
-            CacheScale
-            <input id="cacheScale" type="number" value="1" />
-            <button id="btn-setCacheScale">Set cacheScale</button>
-          </div>
-          <h2>PAGComposition:</h2>
-          <button class="mt-24" id="btn-getWidth">Width</button>
-          <button class="mt-24" id="btn-getHeight">Height</button>
-          <button class="mt-24" id="btn-setContentSize">SetContentSize</button>
-          <button class="mt-24" id="btn-numChildren">NumChildren</button>
-          <button class="mt-24" id="btn-getLayerAt">GetLayerAt</button>
-          <button class="mt-24" id="btn-getLayerIndex">GetLayerIndex</button>
-          <button class="mt-24" id="btn-swapLayerAt">SwapLayerAt</button>
-          <button class="mt-24" id="btn-swapLayer">SwapLayer</button>
-          <button class="mt-24" id="btn-contains">Contains</button>
-          <button class="mt-24" id="btn-addLayerAt">AddLayerAt</button>
-          <button class="mt-24" id="btn-addLayer">AddLayer</button>
-          <button class="mt-24" id="btn-removeLayerAt">RemoveLayerAt</button>
-          <button class="mt-24" id="btn-removeAllLayers">RemoveAllLayers</button>
-          <button class="mt-24" id="btn-audioStartTime">AudioStartTime</button>
         </section>
       </div>
     </div>
