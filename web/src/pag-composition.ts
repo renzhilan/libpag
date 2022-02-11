@@ -100,6 +100,12 @@ export class PAGComposition extends PAGLayer {
     return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._audioMarkers, this.wasmIns)) as Array<Marker>;
   }
   /**
+   * Returns the audio markers of this composition.
+   */
+  public async audioBytes(): Promise<any> {
+    return (await PAGComposition.module.webAssemblyQueue.exec(this.wasmIns._audioBytes, this.wasmIns)) as any;
+  }
+  /**
    * Remove the specified PAGLayer from current PAGComposition.
    */
   public async removeLayerAt(index: number): Promise<number> {

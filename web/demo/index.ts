@@ -268,6 +268,23 @@ const testPAGComposition = {
     const audioMarkers = await pagComposition.audioMarkers();
     Log.log(`test audioMarkers: size`, audioMarkers.size());
   },
+  audioBytes: async () => {
+    const audioMarkers = await pagComposition.audioBytes();
+    console.log('我得到都是生生世世');
+    const ab = audioMarkers.buffer;
+    // const pagLayer_1 = new PAG.ByteData(audioMarkers);
+    // console.log('我得到都是生生世世', await pagLayer_1.length());
+    // console.log('我得到都是生生世世', await pagLayer_1.data());
+    Log.log(`test audioBytes: size`, audioMarkers);
+    Log.log(`test audioBytes: siz1e`, ab);
+    const blob = new Blob([ab]);
+    Log.log(`test audioBytes: siz12e`, blob);
+    const video = document.getElementById('video_player');
+    const obj_url = window.URL.createObjectURL(blob);
+    video.src = obj_url;
+    video.play();
+
+  },
   getLayerIndex: async () => {
     const pagLayerWasm = await pagComposition.getLayerAt(0);
     const index = await pagComposition.getLayerIndex(pagLayerWasm);

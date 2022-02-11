@@ -17,6 +17,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <emscripten/bind.h>
+#include <emscripten/val.h>
 
 #include "gpu/opengl/GLDefines.h"
 #include "image/ImageInfo.h"
@@ -31,6 +32,9 @@
 using namespace emscripten;
 using namespace pag;
 
+val getBytes(size_t bufferLength, uint8_t* byteBuffer){
+  return val(typed_memory_view(bufferLength, byteBuffer));
+}
 
 EMSCRIPTEN_BINDINGS(pag) {
   class_<PAGLayer>("_PAGLayer")
@@ -83,6 +87,13 @@ EMSCRIPTEN_BINDINGS(pag) {
                   std::vector<const Marker*> result = pagComposition.audioMarkers();
                   return result;
                 }))
+      .function("_audioBytes", optional_override([](PAGComposition& pagComposition) {
+                  auto result = pagComposition.audioBytes();
+                  if(result->length() == 0){
+                    return val(0);
+                  }
+                  return getBytes(result->length() ,result->data());
+                }))          
       .function("_removeLayerAt", &PAGComposition::removeLayerAt)
       .function("_removeAllLayers", &PAGComposition::removeAllLayers)
       .function("_addLayer", optional_override([](PAGComposition& pagComposition,
@@ -138,7 +149,6 @@ EMSCRIPTEN_BINDINGS(pag) {
                         glFrameBufferInfo.format = GL::RGBA8;
                         BackendRenderTarget glRenderTarget(glFrameBufferInfo, width, height);
                         auto origin = flipY ? ImageOrigin::BottomLeft : ImageOrigin::TopLeft;
-
                         return PAGSurface::MakeFrom(glRenderTarget, origin);
                       }))
       .function("_width", &PAGSurface::width)
@@ -183,6 +193,13 @@ EMSCRIPTEN_BINDINGS(pag) {
                 optional_override([](PAGPlayer& pagPlayer, std::shared_ptr<PAGFile>& pagFile) {
                   pagPlayer.setComposition(std::move(pagFile));
                 }));
+
+  class_<ByteData>("_ByteData")
+      .smart_ptr<std::shared_ptr<ByteData>>("_ByteData")
+      .function("_length", optional_override([](ByteData& byteData) {
+                  return static_cast<int>(byteData.length());
+                }))
+      .function("_data", &ByteData::data, allow_raw_pointers());
 
   value_object<FontMetrics>("FontMetrics")
       .field("ascent", &FontMetrics::ascent)
