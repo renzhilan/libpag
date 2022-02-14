@@ -1,6 +1,5 @@
 import { PAGInit } from '../src/pag';
 import { PAGFile } from '../src/pag-file';
-import { AudioPlayer } from '../src/core/audio-player';
 import { Log } from '../src/utils/log';
 
 import { PAG as PAGNamespace, ParagraphJustification } from '../src/types';
@@ -46,7 +45,6 @@ PAGInit({
 
   // 加载PAG
   document.getElementById('btn-upload-pag').addEventListener('click', () => {
-
     document.getElementById('upload-pag').click();
   });
   document.getElementById('upload-pag').addEventListener('change', (event) => {
@@ -126,22 +124,18 @@ PAGInit({
   // 控制
   document.getElementById('btn-play').addEventListener('click', () => {
     pagView.play();
-    audioEl.play();
     console.log('开始');
   });
   document.getElementById('btn-pause').addEventListener('click', () => {
     pagView.pause();
-    audioEl.pause();
     console.log('暂停');
   });
   document.getElementById('btn-stop').addEventListener('click', () => {
     pagView.stop();
-    audioEl.stop();
     console.log('停止');
   });
   document.getElementById('btn-destroy').addEventListener('click', () => {
     pagView.destroy();
-    audioEl.onDestroy();
     console.log('销毁');
   });
 
@@ -364,6 +358,7 @@ const createPAGView = async (file) => {
   });
   pagView.addListener('onAnimationRepeat', (event) => {
     console.log('onAnimationRepeat', event);
+    audioEl.stop();
     audioEl.play();
   });
   document.getElementById('control').style.display = '';
@@ -371,16 +366,14 @@ const createPAGView = async (file) => {
   const editableLayers = await getEditableLayer(PAG, pagFile);
   console.log(editableLayers);
   renderEditableLayer(editableLayers);
-  audioEl = await createAuditPlayer();
+  pagComposition = await pagView.getComposition();
+  const audioBytes = await pagComposition.audioBytes();
+  audioEl = await pagView.createMP3(audioBytes);
   console.log(`已加载 ${file.name}`);
   return pagView;
 };
 
-const createAuditPlayer = async () => {
-  pagComposition = await pagView.getComposition();
-  const audioBytes = await pagComposition.audioBytes();
-  return new AudioPlayer(audioBytes);
-};
+
 
 const loadVideoReady = (el, src) => {
   return new Promise((resolve) => {

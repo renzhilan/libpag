@@ -3,7 +3,7 @@ import { PAGPlayer } from './pag-player';
 import { EventManager, Listener } from './utils/event-manager';
 import { PAGSurface } from './pag-surface';
 import { PAGFile } from './pag-file';
-
+import { AudioPlayer } from '../src/core/audio-player';
 export class PAGView {
   public static module: PAG;
   /**
@@ -53,7 +53,7 @@ export class PAGView {
   private pagSurface: PAGSurface;
   private repeatedTimes = 0;
   private eventManager: EventManager = null;
-
+  private audioEl = null;
   public constructor(pagPlayer: PAGPlayer) {
     this.player = pagPlayer;
   }
@@ -79,18 +79,13 @@ export class PAGView {
   public removeListener(eventName: PAGViewListenerEvent, listener?: Listener) {
     return this.eventManager.off(eventName, listener);
   }
-  // /**
-  //  * init MP3 Resources .
-  //  */
-  // public async initMP3() {
-  //   if (this.isPlaying || this.isDestroyed) return;
-  //   if (this.playTime === 0) {
-  //     this.eventManager.emit(PAGViewListenerEvent.onAnimationStart, this);
-  //   }
-  //   this.isPlaying = true;
-  //   this.startTime = Date.now() * 1000 - this.playTime;
-  //   await this.flushLoop();
-  // }
+  /**
+   * init MP3 Resources .
+   */
+  public async createMP3(audioBytes) {
+    this.audioEl = new AudioPlayer(audioBytes)
+    return this.audioEl;
+  }
   /**
    * Start the animation.
    */
@@ -100,6 +95,7 @@ export class PAGView {
       this.eventManager.emit(PAGViewListenerEvent.onAnimationStart, this);
     }
     this.isPlaying = true;
+    this.audioEl.play();
     this.startTime = Date.now() * 1000 - this.playTime;
     await this.flushLoop();
   }
@@ -109,6 +105,7 @@ export class PAGView {
   public pause() {
     if (!this.isPlaying || this.isDestroyed) return;
     this.clearTimer();
+    this.audioEl.pause();
     this.isPlaying = false;
   }
   /**
@@ -121,6 +118,7 @@ export class PAGView {
     await this.player.setProgress(0);
     await this.flush();
     this.isPlaying = false;
+    this.audioEl.stop();
     if (notification) {
       this.eventManager.emit(PAGViewListenerEvent.onAnimationCancel, this);
     }
