@@ -1,5 +1,6 @@
 import { PAGInit } from '../src/pag';
 import { PAGFile } from '../src/pag-file';
+import { AudioPlayer } from '../src/core/audio-player';
 import { Log } from '../src/utils/log';
 
 import { PAG as PAGNamespace, ParagraphJustification } from '../src/types';
@@ -11,6 +12,7 @@ let cacheEnabled: boolean;
 let videoEnabled: boolean;
 let globalCacheScale: boolean;
 let videoEl = null;
+let audioEl = null;
 let PAG: PAGNamespace;
 
 PAGInit({
@@ -124,18 +126,22 @@ PAGInit({
   // 控制
   document.getElementById('btn-play').addEventListener('click', () => {
     pagView.play();
+    audioEl.play();
     console.log('开始');
   });
   document.getElementById('btn-pause').addEventListener('click', () => {
     pagView.pause();
+    audioEl.pause();
     console.log('暂停');
   });
   document.getElementById('btn-stop').addEventListener('click', () => {
     pagView.stop();
+    audioEl.stop();
     console.log('停止');
   });
   document.getElementById('btn-destroy').addEventListener('click', () => {
     pagView.destroy();
+    audioEl.onDestroy();
     console.log('销毁');
   });
 
@@ -230,7 +236,7 @@ const existsLayer = (pagLayerWasm: object) => {
   return false;
 }
 
-// PAGComposition api 测试
+// PAGComposition api test
 const testPAGComposition = {
   rect: async () => {
     Log.log(`test result: width: ${await pagComposition.width()}, height: ${await pagComposition.height()}`)
@@ -269,21 +275,8 @@ const testPAGComposition = {
     Log.log(`test audioMarkers: size`, audioMarkers.size());
   },
   audioBytes: async () => {
-    const audioMarkers = await pagComposition.audioBytes();
-    console.log('我得到都是生生世世');
-    const ab = audioMarkers.buffer;
-    // const pagLayer_1 = new PAG.ByteData(audioMarkers);
-    // console.log('我得到都是生生世世', await pagLayer_1.length());
-    // console.log('我得到都是生生世世', await pagLayer_1.data());
-    Log.log(`test audioBytes: size`, audioMarkers);
-    Log.log(`test audioBytes: siz1e`, ab);
-    const blob = new Blob([ab]);
-    Log.log(`test audioBytes: siz12e`, blob);
-    const video = document.getElementById('video_player');
-    const obj_url = window.URL.createObjectURL(blob);
-    video.src = obj_url;
-    video.play();
-
+    const audioBytes = await pagComposition.audioBytes();
+    console.log('test audioBytes：', audioBytes);
   },
   getLayerIndex: async () => {
     const pagLayerWasm = await pagComposition.getLayerAt(0);
@@ -320,7 +313,6 @@ const testPAGComposition = {
   }
 }
 const testPAGCompositionAPi = async () => {
-  pagComposition = await pagView.getComposition();
   Log.log(`-------------------TEST PAGCompositionAPI START--------------------- `);
   for (let i in testPAGComposition){
     if (testPAGComposition.hasOwnProperty(i)) {
@@ -372,15 +364,22 @@ const createPAGView = async (file) => {
   });
   pagView.addListener('onAnimationRepeat', (event) => {
     console.log('onAnimationRepeat', event);
+    audioEl.play();
   });
   document.getElementById('control').style.display = '';
   // 图层编辑
   const editableLayers = await getEditableLayer(PAG, pagFile);
   console.log(editableLayers);
   renderEditableLayer(editableLayers);
+  audioEl = await createAuditPlayer();
   console.log(`已加载 ${file.name}`);
-
   return pagView;
+};
+
+const createAuditPlayer = async () => {
+  pagComposition = await pagView.getComposition();
+  const audioBytes = await pagComposition.audioBytes();
+  return new AudioPlayer(audioBytes);
 };
 
 const loadVideoReady = (el, src) => {

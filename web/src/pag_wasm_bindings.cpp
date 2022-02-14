@@ -32,10 +32,6 @@
 using namespace emscripten;
 using namespace pag;
 
-val getBytes(size_t bufferLength, uint8_t* byteBuffer){
-  return val(typed_memory_view(bufferLength, byteBuffer));
-}
-
 EMSCRIPTEN_BINDINGS(pag) {
   class_<PAGLayer>("_PAGLayer")
       .smart_ptr<std::shared_ptr<PAGLayer>>("_PAGLayer")
@@ -73,27 +69,12 @@ EMSCRIPTEN_BINDINGS(pag) {
       .function("_numChildren", &PAGComposition::numChildren)
       .function("_getLayerAt", &PAGComposition::getLayerAt)
       .function("_getLayerIndex", &PAGComposition::getLayerIndex)
-      .function("_getLayersByName", &PAGComposition::getLayersByName)
       .function("_swapLayerAt", &PAGComposition::swapLayerAt)
       .function("_swapLayer", &PAGComposition::swapLayer)
       .function("_contains", optional_override([](PAGComposition& pagComposition,
                                                   std::shared_ptr<PAGLayer> pagLayer) {
                   return static_cast<bool>(pagComposition.contains(pagLayer));
                 }))
-      .function("_audioStartTime", optional_override([](PAGComposition& pagComposition) {
-                  return static_cast<int>(pagComposition.audioStartTime());
-                }))
-      .function("_audioMarkers", optional_override([](PAGComposition& pagComposition) {
-                  std::vector<const Marker*> result = pagComposition.audioMarkers();
-                  return result;
-                }))
-      .function("_audioBytes", optional_override([](PAGComposition& pagComposition) {
-                  auto result = pagComposition.audioBytes();
-                  if(result->length() == 0){
-                    return val(0);
-                  }
-                  return getBytes(result->length() ,result->data());
-                }))          
       .function("_removeLayerAt", &PAGComposition::removeLayerAt)
       .function("_removeAllLayers", &PAGComposition::removeAllLayers)
       .function("_addLayer", optional_override([](PAGComposition& pagComposition,
@@ -103,7 +84,21 @@ EMSCRIPTEN_BINDINGS(pag) {
       .function("_addLayerAt", optional_override([](PAGComposition& pagComposition,
                                                     std::shared_ptr<PAGLayer> pagLayer, int index) {
                   return static_cast<bool>(pagComposition.addLayerAt(pagLayer, index));
-                }));
+                }))
+      .function("_audioBytes", optional_override([](PAGComposition& pagComposition) {
+                  ByteData* result = pagComposition.audioBytes();
+                  if (result->length() == 0) {
+                    return val(0);
+                  }
+                  return val(typed_memory_view(result->length(), result->data()));
+                }))
+
+      .function("_audioMarkers", &PAGComposition::audioMarkers)
+      .function("_audioStartTime", optional_override([](PAGComposition& pagComposition) {
+                  return static_cast<int>(pagComposition.audioStartTime());
+                }))
+      .function("_getLayersByName", &PAGComposition::getLayersByName)
+      .function("_getLayersUnderPoint", &PAGComposition::getLayersUnderPoint);
 
   class_<PAGFile, base<PAGComposition>>("_PAGFile")
       .smart_ptr<std::shared_ptr<PAGFile>>("_PAGFile")

@@ -58,6 +58,8 @@ export class PAGView {
     this.player = pagPlayer;
   }
 
+
+
   /**
    * The duration of current composition in microseconds.
    */
@@ -77,6 +79,18 @@ export class PAGView {
   public removeListener(eventName: PAGViewListenerEvent, listener?: Listener) {
     return this.eventManager.off(eventName, listener);
   }
+  // /**
+  //  * init MP3 Resources .
+  //  */
+  // public async initMP3() {
+  //   if (this.isPlaying || this.isDestroyed) return;
+  //   if (this.playTime === 0) {
+  //     this.eventManager.emit(PAGViewListenerEvent.onAnimationStart, this);
+  //   }
+  //   this.isPlaying = true;
+  //   this.startTime = Date.now() * 1000 - this.playTime;
+  //   await this.flushLoop();
+  // }
   /**
    * Start the animation.
    */

@@ -6,7 +6,6 @@ import { PAGImage } from './pag-image';
 import { PAGView } from './pag-view';
 import { PAGFont } from './pag-font';
 import { PAGLayer } from './pag-layer';
-import { ByteData } from './pag-byteData';
 import { PAGComposition } from './pag-composition';
 import { VideoReader } from './core/video-reader';
 import { ScalerContext } from './core/scaler-context';
@@ -19,8 +18,6 @@ import { NativeImage } from './core/native-image';
 export const binding = (module: PAG) => {
   module.PAGFile = PAGFile;
   PAGFile.module = module;
-  module.ByteData = ByteData;
-  ByteData.module = module;
   module.PAGPlayer = PAGPlayer;
   PAGPlayer.module = module;
   module.PAGView = PAGView;
